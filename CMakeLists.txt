@@ -9,6 +9,9 @@ link_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/src/test/)
 link_directories(${CMAKE_SOURCE_DIR}/src/test/)
 
+set(GTEST_INCLUDE_DIR $ENV{GTEST_DIR})
+include_directories(${GTEST_INCLUDE_DIR}/include/)
+
 add_subdirectory(src)
 add_executable(VDSProject src/main.cpp)
 target_link_libraries(VDSProject Manager)

@@ -31,10 +31,10 @@ const BDD_ID &Manager::True() {
     return BDD_ID_True;
 }
 
-bool Manager::isConstant(const BDD_ID f) {
-    return false;
+bool Manager::isConstant(const BDD_ID id) {
+    return id == BDD_ID_0 || id == BDD_ID_1;
 }
 
-bool Manager::isVariable(const BDD_ID x) {
-    return false;
+bool Manager::isVariable(const BDD_ID id) {
+    return id != BDD_ID_0 && id != BDD_ID_1;;
 }

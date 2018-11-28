@@ -15,6 +15,8 @@ BDD_ID Manager::createVar(const std::string &label) {
     node.label = label;
     node.bdd = bdd_count;
     node.topvar = bdd_count;
+    node.high  = BDD_ID_1;
+    node.low = BDD_ID_0;
     uniqueTable.insert(std::make_pair(node.bdd,node));
     bdd_count++;
     return node.bdd;
@@ -59,5 +61,10 @@ void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
 }
 
 void Manager::findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root) {
-
+    nodes_of_root.insert(root);
+    if (!isConstant(root)) {
+        BDD_Node_t rootNode = uniqueTable.at(root);
+        findNodes(rootNode.high, nodes_of_root);
+        findNodes(rootNode.low, nodes_of_root);
+    }
 }

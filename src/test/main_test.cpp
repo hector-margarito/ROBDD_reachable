@@ -73,7 +73,7 @@ TEST (ManagerTest_FindVars, ManagerShouldFindVariables) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
 
-    std::set<BDD_ID> vars, vars_b;
+    std::set<BDD_ID> vars;
     manager->findVars(BDD_ID_0, vars);
     EXPECT_TRUE(vars.empty());
 
@@ -91,11 +91,11 @@ TEST (ManagerTest_FindNodes, ManagerShouldFindNodes) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
 
-    std::set<BDD_ID> vars, vars_b;
-    manager->findVars(BDD_ID_0, vars);
-    EXPECT_TRUE(vars.empty());
+    std::set<BDD_ID> vars;
+    manager->findNodes(BDD_ID_0, vars);
+    EXPECT_EQ(1, vars.size());
 
-    manager->findVars(varA_ID, vars);
+    manager->findNodes(varA_ID, vars);
     EXPECT_EQ(3, vars.size()); // We should expect the own variable a and the terminal nodes 0 and 1    
 }
 

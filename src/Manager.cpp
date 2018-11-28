@@ -14,6 +14,7 @@ BDD_ID Manager::createVar(const std::string &label) {
     BDD_Node_t node;
     node.label = label;
     node.bdd = bdd_count;
+    node.topvar = bdd_count;
     uniqueTable.insert(std::make_pair(node.bdd,node));
     bdd_count++;
     return node.bdd;
@@ -44,5 +45,5 @@ BDD_ID Manager::topVar(const BDD_ID id) {
 }
 
 std::string Manager::getTopVarName(const BDD_ID &root) {
-    return "";
+    return uniqueTable.at(root).label;
 }

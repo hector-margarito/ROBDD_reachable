@@ -37,7 +37,7 @@ bool Manager::isConstant(const BDD_ID id) {
 }
 
 bool Manager::isVariable(const BDD_ID id) {
-    return id != BDD_ID_0 && id != BDD_ID_1;;
+    return !isConstant(id) && id == topVar (id);
 }
 
 BDD_ID Manager::topVar(const BDD_ID id) {

@@ -57,3 +57,7 @@ void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
         findVars(rootNode.low, vars_of_root);
     }
 }
+
+void Manager::findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root) {
+
+}

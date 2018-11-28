@@ -22,6 +22,12 @@ TEST (ManagerTest, ManagerTableShouldHaveThreeNodesAfterCreateVar) {
     EXPECT_EQ(3, manager->uniqueTableSize());
 }
 
+TEST (ManagerTest, ManagerTableShouldHaveBooleanMethods) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    EXPECT_TRUE(manager->True());
+    EXPECT_FALSE(manager->False());
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

@@ -23,3 +23,13 @@ size_t Manager::uniqueTableSize() {
     return uniqueTable.size();
 }
 
+const BDD_ID &Manager::False() {
+    return BDD_ID_False;
+}
+
+const BDD_ID &Manager::True() {
+    return BDD_ID_True;
+}
+
+
+

@@ -33,6 +33,10 @@ namespace ClassProject {
 
             BDD_ID createVar(const std::string &label);
 
+            const BDD_ID &True();
+
+            const BDD_ID &False();
+
             size_t uniqueTableSize();
 
         private:
@@ -41,6 +45,11 @@ namespace ClassProject {
             BDD_ID bdd_count;
 
             std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
+
+            const BDD_ID BDD_ID_False = 0;
+            
+            const BDD_ID BDD_ID_True = 1;
+
     };
 }
 #endif

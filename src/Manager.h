@@ -16,8 +16,29 @@
 
 namespace ClassProject {
 
+    typedef struct BDD_Node_t {
+        std::string label;
+        BDD_ID bdd;
+        BDD_ID high;
+        BDD_ID low;
+        std::string topvar;
+    } BDD_Node_t;
 
+    class Manager : public ManagerInterface {
+        public:
+            Manager(std::string name);
 
+            BDD_ID createVar(const std::string &label);
+
+            size_t uniqueTableSize();
+
+        private:
+            std::string name;
+
+            BDD_ID bdd_count;
+
+            std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
+    };
 }
 #endif
 

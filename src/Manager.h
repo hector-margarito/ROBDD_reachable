@@ -16,6 +16,9 @@
 
 namespace ClassProject {
 
+#define BDD_ID_0 0
+#define BDD_ID_1 1
+
     typedef struct BDD_Node_t {
         std::string label;
         BDD_ID bdd;

@@ -58,6 +58,17 @@ TEST (ManagerTest_TopVar, BDDNodeShouldHaveTopVar) {
     EXPECT_EQ(varB_ID, manager->topVar(varB_ID));
 }
 
+TEST (ManagerTest_GetTopVarName, BDDNodeShouldHaveTopVarName) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+
+    EXPECT_STREQ("0", manager->getTopVarName(BDD_ID_0).c_str());
+    EXPECT_STREQ("1", manager->getTopVarName(BDD_ID_1).c_str());
+    EXPECT_STREQ("a", manager->getTopVarName(varA_ID).c_str());
+    EXPECT_STREQ("b", manager->getTopVarName(varB_ID).c_str());
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

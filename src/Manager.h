@@ -43,6 +43,8 @@ namespace ClassProject {
 
             BDD_ID topVar(const BDD_ID f);
 
+            std::string getTopVarName(const BDD_ID &root);
+
             size_t uniqueTableSize();
 
         private:

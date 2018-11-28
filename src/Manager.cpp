@@ -42,3 +42,7 @@ bool Manager::isVariable(const BDD_ID id) {
 BDD_ID Manager::topVar(const BDD_ID id) {
     return uniqueTable.at(id).topvar;
 }
+
+std::string Manager::getTopVarName(const BDD_ID &root) {
+    return "";
+}

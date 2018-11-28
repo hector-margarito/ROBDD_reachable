@@ -49,5 +49,11 @@ std::string Manager::getTopVarName(const BDD_ID &root) {
 }
 
 void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
-    return;
+    if (isVariable(root)) {
+        vars_of_root.insert(root);
+    } else if (!isConstant(root)) {
+        BDD_Node_t rootNode = uniqueTable.at(root);
+        findVars(rootNode.high, vars_of_root);
+        findVars(rootNode.low, vars_of_root);
+    }
 }

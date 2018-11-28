@@ -47,3 +47,7 @@ BDD_ID Manager::topVar(const BDD_ID id) {
 std::string Manager::getTopVarName(const BDD_ID &root) {
     return uniqueTable.at(root).label;
 }
+
+void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
+    return;
+}

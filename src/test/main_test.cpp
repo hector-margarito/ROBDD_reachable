@@ -69,6 +69,25 @@ TEST (ManagerTest_GetTopVarName, BDDNodeShouldHaveTopVarName) {
     EXPECT_STREQ("b", manager->getTopVarName(varB_ID).c_str());
 }
 
+TEST (ManagerTest_FindVars, ManagerShouldFindVariables) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+
+    std::set<BDD_ID> vars, vars_b;
+    manager->findVars(BDD_ID_0, vars);
+    EXPECT_TRUE(vars.empty());
+
+    manager->findVars(varA_ID, vars);
+    EXPECT_EQ(1, vars.size());
+    
+    std::set<unsigned long>::iterator it;
+    for (it = vars.begin(); it != vars.end(); ++it) {
+        BDD_ID var = *it;
+        EXPECT_TRUE(manager->isVariable(var));
+    }
+    
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

@@ -38,3 +38,7 @@ bool Manager::isConstant(const BDD_ID id) {
 bool Manager::isVariable(const BDD_ID id) {
     return id != BDD_ID_0 && id != BDD_ID_1;;
 }
+
+BDD_ID Manager::topVar(const BDD_ID id) {
+    return uniqueTable.at(id).topvar;
+}

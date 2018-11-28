@@ -24,7 +24,7 @@ namespace ClassProject {
         BDD_ID bdd;
         BDD_ID high;
         BDD_ID low;
-        std::string topvar;
+        BDD_ID topvar;
     } BDD_Node_t;
 
     class Manager : public ManagerInterface {
@@ -40,6 +40,8 @@ namespace ClassProject {
             bool isConstant(const BDD_ID f);
 
             bool isVariable(const BDD_ID x);
+
+            BDD_ID topVar(const BDD_ID f);
 
             size_t uniqueTableSize();
 

@@ -19,11 +19,11 @@ namespace ClassProject {
         virtual   const BDD_ID &True() = 0;
 
         virtual   const BDD_ID &False() = 0;
-#if 0
+
         virtual   bool isConstant(const BDD_ID f) = 0;
 
         virtual   bool isVariable(const BDD_ID x) = 0;
-
+#if 0
         virtual   BDD_ID topVar(const BDD_ID f) = 0;
 
         virtual   BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e) = 0;

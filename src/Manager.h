@@ -37,6 +37,10 @@ namespace ClassProject {
 
             const BDD_ID &False();
 
+            bool isConstant(const BDD_ID f);
+
+            bool isVariable(const BDD_ID x);
+
             size_t uniqueTableSize();
 
         private:
@@ -47,7 +51,7 @@ namespace ClassProject {
             std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
 
             const BDD_ID BDD_ID_False = 0;
-            
+
             const BDD_ID BDD_ID_True = 1;
 
     };

@@ -28,6 +28,25 @@ TEST (ManagerTest, ManagerTableShouldHaveBooleanMethods) {
     EXPECT_FALSE(manager->False());
 }
 
+TEST (ManagerTest_IsConstant, BDDNodeShouldBeAConstant) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    
+    BDD_ID varId = manager->createVar("a");
+
+    EXPECT_TRUE(manager->isConstant(BDD_ID_0));
+    EXPECT_TRUE(manager->isConstant(BDD_ID_1));
+    EXPECT_FALSE(manager->isConstant(varId));
+}
+
+TEST (ManagerTest_IsVariable, BDDNodeShouldBeAVariable) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varId = manager->createVar("a");
+
+    EXPECT_FALSE(manager->isVariable(BDD_ID_0));
+    EXPECT_FALSE(manager->isVariable(BDD_ID_1));
+    EXPECT_TRUE(manager->isVariable(varId));
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

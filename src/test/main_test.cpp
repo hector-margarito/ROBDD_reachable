@@ -99,6 +99,24 @@ TEST (ManagerTest_FindNodes, ManagerShouldFindNodes) {
     EXPECT_EQ(3, vars.size()); // We should expect the own variable a and the terminal nodes 0 and 1    
 }
 
+TEST (ManagerTest_ITE, ManagerShouldCreateNodeFromOperation) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID varC_ID = manager->createVar("c");
+    BDD_ID varD_ID = manager->createVar("d");
+
+    // f = (A and B) or (C and D) 
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
+    BDD_ID CandD_ID = manager->ite(varC_ID, varD_ID, BDD_ID_0);
+    BDD_ID OR_ID = manager->ite(AandB_ID, BDD_ID_1, CandD_ID);
+
+    EXPECT_EQ(6,AandB_ID);
+    EXPECT_EQ(7,CandD_ID);
+    EXPECT_EQ(9,OR_ID);
+
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

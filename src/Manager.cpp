@@ -68,3 +68,7 @@ void Manager::findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root) {
         findNodes(rootNode.low, nodes_of_root);
     }
 }
+
+BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
+    return -1;
+}

@@ -16,8 +16,8 @@
 
 namespace ClassProject {
 
-#define BDD_ID_0 0
-#define BDD_ID_1 1
+    const BDD_ID BDD_ID_0 = 0;
+    const BDD_ID BDD_ID_1 = 1;
 
     typedef struct BDD_Node_t {
         std::string label;
@@ -50,6 +50,8 @@ namespace ClassProject {
             void findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root);
 
             size_t uniqueTableSize();
+
+            BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
 
         private:
             std::string name;

@@ -85,6 +85,7 @@ namespace ClassProject {
         private:
 
             bool isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e);
+            bool isTerminal(const BDD_ID f, const BDD_ID x);
             bool hasKey(const BDD_ID id);
             BDD_ID createNode(const std::string &label, const BDD_ID top_var, const  BDD_ID high, const BDD_ID low);
             BDD_ID findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);

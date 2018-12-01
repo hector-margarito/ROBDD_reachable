@@ -114,16 +114,11 @@ BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, co
 }
 
 bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
-    bool result = false;
+    return isConstant(i) || ((t == BDD_ID_1) && (e == BDD_ID_0)) || (t == e);
+}
 
-    if ((i == BDD_ID_1 ) ||
-       (i == BDD_ID_0 ) ||
-       ((t == BDD_ID_1) && (e == BDD_ID_0)) ||
-       (t == e)) {
-        result = true;
-    }
-
-    return result;
+bool Manager::isTerminal(const BDD_ID f, const BDD_ID x) {
+    return isConstant(f) || isConstant(x) || topVar(f) > x;
 }
 
 bool Manager::hasKey(const BDD_ID id) {
@@ -131,7 +126,20 @@ bool Manager::hasKey(const BDD_ID id) {
 }
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
-    return -1;
+    BDD_ID result_id;
+    if (!isTerminal(f,x)) {
+        BDD_Node_t node_f = uniqueTable.at(f);
+        if (topVar(f) != x) {
+            BDD_ID co_high = coFactorTrue(node_f.high, x);
+            BDD_ID co_low = coFactorTrue(node_f.low, x);
+            result_id = ite(node_f.topvar, co_high, co_low);
+        } else {
+            result_id = coFactorTrue(node_f.high);
+        }
+    } else {
+        result_id = f;
+    }
+    return result_id;
 }
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
@@ -139,7 +147,16 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
 }
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f) {
-    return -1;
+    BDD_ID result_id;
+    if (!isConstant(f)) {
+        BDD_Node_t node_f = uniqueTable.at(f);
+        BDD_ID co_high = coFactorTrue(node_f.high);
+        BDD_ID co_low = coFactorTrue(node_f.low);
+        result_id = ite(node_f.topvar, co_high, co_low);
+    } else {
+        result_id = f; 
+    }
+    return result_id;
 }
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f) {

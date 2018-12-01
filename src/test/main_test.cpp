@@ -114,7 +114,6 @@ TEST (ManagerTest_ITE, ManagerShouldCreateNodeFromOperation) {
     EXPECT_EQ(6,AandB_ID);
     EXPECT_EQ(7,CandD_ID);
     EXPECT_EQ(9,OR_ID);
-
 }
 
 TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) { 

@@ -28,7 +28,6 @@ namespace ClassProject {
 
         virtual   BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e) = 0;
 
-#if 0
         virtual   BDD_ID coFactorTrue(const BDD_ID f, BDD_ID x) = 0;
 
         virtual   BDD_ID coFactorFalse(const BDD_ID f, BDD_ID x) = 0;
@@ -37,6 +36,7 @@ namespace ClassProject {
 
         virtual   BDD_ID coFactorFalse(const BDD_ID f) = 0;
 
+#if 0
         virtual   BDD_ID and2(const BDD_ID a, const BDD_ID b) = 0;
 
         virtual   BDD_ID or2(const BDD_ID a, const BDD_ID b) = 0;

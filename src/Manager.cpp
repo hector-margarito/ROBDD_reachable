@@ -113,7 +113,7 @@ BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, co
     return computedTable.at(node_computed_key);
 }
 
-bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e){
+bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
     bool result = false;
 
     if ((i == BDD_ID_1 ) ||
@@ -126,7 +126,22 @@ bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     return result;
 }
 
-bool Manager::hasKey(const BDD_ID id)
-{
+bool Manager::hasKey(const BDD_ID id) {
     return (uniqueTable.end() != uniqueTable.find(id));
+}
+
+BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
+    return -1;
+}
+
+BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
+    return -1;
+}
+
+BDD_ID Manager::coFactorTrue(const BDD_ID f) {
+    return -1;
+}
+
+BDD_ID Manager::coFactorFalse(const BDD_ID f) {
+    return -1;
 }

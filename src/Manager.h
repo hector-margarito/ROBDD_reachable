@@ -18,8 +18,7 @@
 
 namespace ClassProject {
     typedef std::tuple<BDD_ID,BDD_ID,BDD_ID> computed_key_t;
-    struct key_hash : public std::unary_function<computed_key_t, std::size_t>
-    {
+    struct key_hash : public std::unary_function<computed_key_t, std::size_t> {
        std::size_t operator()(const computed_key_t& k) const
        {
           return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
@@ -74,6 +73,14 @@ namespace ClassProject {
             size_t uniqueTableSize();
 
             BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
+
+            BDD_ID coFactorTrue(const BDD_ID f, const BDD_ID x);
+
+            BDD_ID coFactorFalse(const BDD_ID f, const BDD_ID x);
+
+            BDD_ID coFactorTrue(const BDD_ID f);
+
+            BDD_ID coFactorFalse(const BDD_ID f);
 
         private:
 

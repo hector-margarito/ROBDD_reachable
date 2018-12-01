@@ -12,9 +12,31 @@
 #include <unordered_map>
 #include <set>
 #include <string>
+#include <tuple>
+#include <functional>
 #include "ManagerInterface.h"
 
 namespace ClassProject {
+    typedef std::tuple<BDD_ID,BDD_ID,BDD_ID> computed_key_t;
+    struct key_hash : public std::unary_function<computed_key_t, std::size_t>
+    {
+       std::size_t operator()(const computed_key_t& k) const
+       {
+          return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
+       }
+    };
+
+    struct key_equal : public std::binary_function<computed_key_t, computed_key_t, bool>
+    {
+       bool operator()(const computed_key_t& v0, const computed_key_t& v1) const
+       {
+          return (
+                   std::get<0>(v0) == std::get<0>(v1) &&
+                   std::get<1>(v0) == std::get<1>(v1) &&
+                   std::get<2>(v0) == std::get<2>(v1)
+                 );
+       }
+    };
 
     const BDD_ID BDD_ID_0 = 0;
     const BDD_ID BDD_ID_1 = 1;
@@ -54,16 +76,18 @@ namespace ClassProject {
             BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
 
         private:
+
+            bool isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e);
+            bool hasKey(const BDD_ID id);
+            BDD_ID createNode(const std::string &label, const BDD_ID top_var, const  BDD_ID high, const BDD_ID low);
+            BDD_ID findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
+
             std::string name;
-
             BDD_ID bdd_count;
-
             std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
-
+            std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> computedTable;
             const BDD_ID BDD_ID_False = 0;
-
             const BDD_ID BDD_ID_True = 1;
-
     };
 }
 #endif

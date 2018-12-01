@@ -10,16 +10,20 @@ Manager::Manager(std::string name) : name(name) {
     createVar("1");
 }
 
-BDD_ID Manager::createVar(const std::string &label) {
+BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
     BDD_Node_t node;
     node.label = label;
     node.bdd = bdd_count;
-    node.topvar = bdd_count;
-    node.high  = BDD_ID_1;
-    node.low = BDD_ID_0;
+    node.topvar = top_var;
+    node.high  = high;
+    node.low = low;
     uniqueTable.insert(std::make_pair(node.bdd,node));
     bdd_count++;
     return node.bdd;
+}
+
+BDD_ID Manager::createVar(const std::string &label) {
+    return createNode(label, bdd_count, BDD_ID_1, BDD_ID_0);
 }
 
 size_t Manager::uniqueTableSize() {
@@ -70,5 +74,59 @@ void Manager::findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root) {
 }
 
 BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
-    return -1;
+    BDD_ID id_result;
+    // check first if the IDs are in the terminal
+    if (hasKey(i) && hasKey(t) && hasKey(e)){
+        // Check first for terminal case
+        if (!isTerminal(i,t,e)){
+            if (computedTable.find(std::make_tuple(i,t,e)) == computedTable.end()){
+                BDD_ID top_var_x = std::min(std::min(topVar(i), topVar(t)), topVar(e));
+                BDD_ID r_high = t;
+                BDD_ID r_low = e;
+
+                if (r_high != r_low) {
+                    id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
+                } else { 
+                    id_result = r_high;
+                }
+            } else {
+                id_result = computedTable.at(std::make_tuple(i, t, e));
+            }
+        } else {
+            id_result = i;
+        }
+    } else {
+        // do we nedd to add to the table?
+        // Mostlikely an exception
+        //
+    }
+    return id_result;
+}
+
+BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
+    computed_key_t node_computed_key = std::make_tuple(top_var, high, low); 
+    if (computedTable.find(node_computed_key) == computedTable.end()) {
+        BDD_ID new_ID = createNode("", top_var, high, low);
+        computedTable.insert(std::make_pair(node_computed_key, new_ID));
+        return new_ID;
+    }
+    return computedTable.at(node_computed_key);
+}
+
+bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e){
+    bool result = false;
+
+    if ((i == BDD_ID_1 ) ||
+       (i == BDD_ID_0 ) ||
+       ((t == BDD_ID_1) && (e == BDD_ID_0)) ||
+       (t == e)) {
+        result = true;
+    }
+
+    return result;
+}
+
+bool Manager::hasKey(const BDD_ID id)
+{
+    return (uniqueTable.end() != uniqueTable.find(id));
 }

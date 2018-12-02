@@ -106,14 +106,18 @@ TEST (ManagerTest_ITE, ManagerShouldCreateNodeFromOperation) {
     BDD_ID varC_ID = manager->createVar("c");
     BDD_ID varD_ID = manager->createVar("d");
 
-    // f = (A and B) or (C and D) 
+    // f = (A or B) and (C and D) 
     BDD_ID AorB_ID = manager->ite(varA_ID, 1, varB_ID);
+    std::cout << "========== A or B END    ===========\n";
     BDD_ID CandD_ID = manager->ite(varC_ID, varD_ID, BDD_ID_0);
+    std::cout << "========== C and D END   ===========\n";
     BDD_ID AND_ID = manager->ite(AorB_ID, CandD_ID, 0);
+    std::cout << "========== Final AND END ===========\n";
 
     EXPECT_EQ(6,AorB_ID);
     EXPECT_EQ(7,CandD_ID);
     EXPECT_EQ(9,AND_ID);
+    EXPECT_EQ(10, manager->uniqueTableSize());
 }
 
 TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) { 

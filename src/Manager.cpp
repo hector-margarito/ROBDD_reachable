@@ -94,13 +94,41 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             if (computedTable.find(std::make_tuple(i,t,e)) == computedTable.end()){
                 BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
                 std::cout << "ITE: top_var_x: " << top_var_x << "\n";
+                // Hector Mod
+                //BDD_ID r_high = ite(node_x.high,t,e);
+                //BDD_ID r_low = ite(node_x.low,t,e);
+
+                BDD_Node_t node_x = uniqueTable.at(top_var_x);
+                BDD_ID r_high; 
+                BDD_ID r_low;
+
+                if(top_var_x == topVar(i)){
+                    BDD_Node_t node_i = uniqueTable.at(i);
+                    r_high = ite(node_i.high,t,e);
+                    r_low = ite(node_i.low,t,e);
+                }
+                else if(top_var_x == topVar(t)){
+                    BDD_Node_t node_t = uniqueTable.at(t);
+                    r_high = ite(i,node_t.high,e);
+                    r_low = ite(i,node_t.low,e);
+                }
+                else if(top_var_x == topVar(e)){
+                    BDD_Node_t node_e = uniqueTable.at(e);
+                    r_high = ite(i,t,node_e.high);
+                    r_low = ite(i,t,node_e.low);
+                }
+
+#if 0
                 BDD_ID r_high = coFactorTrue(t,top_var_x);
                 BDD_ID r_low = coFactorFalse(e,top_var_x);
+#endif
                 std::cout << "r_high: " << r_high << "\n";
                 std::cout << "r_low: " << r_low << "\n";
 
                 if (r_high != r_low) {
                     id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
+                    // check if it was a terminal case, if not call again ite
+                 //   if(!isTerminal(
                 } else { 
                     id_result = r_high;
                     std::cout << "R_HIGH: " << r_high << " Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
@@ -111,13 +139,22 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             }
         } else {
             std::cout << "TERMINAL CASE: Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
-            id_result = i;
+            /* Check each terminal case to return the appropiate response */
+            if(isConstant(i)){
+                if(BDD_ID_1 == i) id_result = t;
+                else id_result = e;
+            }else{
+                if(t == e) id_result = t;
+                else if((t == BDD_ID_1) && (e == BDD_ID_0)) id_result = i;
+                else if((t == BDD_ID_0) && (e == BDD_ID_1)) id_result = !i; // is this correct??
+            }
         }
     } else {
         // do we nedd to add to the table?
         // Mostlikely an exception
         //
     }
+    std::cout << "[Manager::ite] " << "id_result = " << id_result << std::endl;
     return id_result;
 }
 

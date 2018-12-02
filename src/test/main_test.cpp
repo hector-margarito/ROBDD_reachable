@@ -126,12 +126,10 @@ TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) {
     BDD_ID varB_ID = manager->createVar("b");
 
     BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
-#if 0
     EXPECT_EQ(BDD_ID_0, manager->coFactorTrue(BDD_ID_0, BDD_ID_0));
     EXPECT_EQ(BDD_ID_1, manager->coFactorTrue(BDD_ID_1, BDD_ID_1));
     EXPECT_EQ(varA_ID, manager->coFactorTrue(varA_ID, BDD_ID_0));
     EXPECT_EQ(varA_ID, manager->coFactorTrue(varA_ID, BDD_ID_1));
-#endif
     EXPECT_EQ(varB_ID, manager->coFactorTrue(AandB_ID, varA_ID));
 }
 

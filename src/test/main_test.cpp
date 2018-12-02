@@ -133,6 +133,19 @@ TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) {
     EXPECT_EQ(varB_ID, manager->coFactorTrue(AandB_ID, varA_ID));
 }
 
+TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorFalse) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
+    EXPECT_EQ(BDD_ID_0, manager->coFactorFalse(BDD_ID_0, BDD_ID_0));
+    EXPECT_EQ(BDD_ID_1, manager->coFactorFalse(BDD_ID_1, BDD_ID_1));
+    EXPECT_EQ(varA_ID, manager->coFactorFalse(varA_ID, BDD_ID_0));
+    EXPECT_EQ(varA_ID, manager->coFactorFalse(varA_ID, BDD_ID_1));
+    EXPECT_EQ(BDD_ID_0, manager->coFactorFalse(AandB_ID, varA_ID));
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

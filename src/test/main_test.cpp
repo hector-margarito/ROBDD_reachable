@@ -151,12 +151,20 @@ TEST (ManagerTest_Operation, ManagerShouldSolveAndOperation) {
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
 
+    // Verify same result using ite() & and2(). Same operation 
+    // should not be added again to the Unique table
     BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
     EXPECT_EQ(5, manager->uniqueTableSize());
     BDD_ID AandB_ID_2 = manager->ite(varA_ID, varB_ID, BDD_ID_0);
     EXPECT_EQ(5, manager->uniqueTableSize()); // just to check it didn't add same operation
 
     EXPECT_EQ(AandB_ID, AandB_ID_2);
+
+    //Isomorphic Graph shouldn't be added to Uniquetable
+    AandB_ID_2 = manager->and2(varB_ID, varA_ID);
+    EXPECT_EQ(AandB_ID, AandB_ID_2);
+    EXPECT_EQ(5, manager->uniqueTableSize());
+
     
 }
 

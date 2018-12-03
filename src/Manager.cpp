@@ -248,11 +248,11 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
     return result_id;
 }
 BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b){
-    return -1;
+    return ite(a,b,0);
 }
 
 BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b){
-    return -1;
+    return ite(a,1,b);
 }
 
 BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b){

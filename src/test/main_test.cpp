@@ -146,6 +146,31 @@ TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorFalse) {
     EXPECT_EQ(BDD_ID_0, manager->coFactorFalse(AandB_ID, varA_ID));
 }
 
+TEST (ManagerTest_Operation, ManagerShouldSolveAndOperation) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+
+    BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
+    EXPECT_EQ(5, manager->uniqueTableSize());
+    BDD_ID AandB_ID_2 = manager->ite(varA_ID, varB_ID, BDD_ID_0);
+    EXPECT_EQ(5, manager->uniqueTableSize()); // just to check it didn't add same operation
+
+    EXPECT_EQ(AandB_ID, AandB_ID_2);
+    
+}
+
+TEST (ManagerTest_Operation, ManagerShouldSolveOrOperation) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+
+    BDD_ID AorB_ID = manager->or2(varA_ID, varB_ID);
+    BDD_ID AorB_ID_2 = manager->ite(varA_ID, BDD_ID_1,varB_ID);
+
+    EXPECT_EQ(AorB_ID, AorB_ID_2);
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

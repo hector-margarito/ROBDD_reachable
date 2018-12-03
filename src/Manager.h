@@ -81,6 +81,18 @@ namespace ClassProject {
             BDD_ID coFactorTrue(const BDD_ID f);
 
             BDD_ID coFactorFalse(const BDD_ID f);
+            
+            BDD_ID and2(const BDD_ID a, const BDD_ID b);
+
+            BDD_ID or2(const BDD_ID a, const BDD_ID b);
+
+            BDD_ID xor2(const BDD_ID a, const BDD_ID b);
+
+            BDD_ID neg(const BDD_ID a);
+
+            BDD_ID nand2(const BDD_ID a, const BDD_ID b);
+
+            BDD_ID nor2(const BDD_ID a, const BDD_ID b);
 
         private:
 

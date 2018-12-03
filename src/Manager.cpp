@@ -138,7 +138,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             }else{
                 if(t == e) id_result = t;
                 else if((t == BDD_ID_1) && (e == BDD_ID_0)) id_result = i;
-                else if((t == BDD_ID_0) && (e == BDD_ID_1)) id_result = !i; // is this correct??
+                else if((t == BDD_ID_0) && (e == BDD_ID_1)) id_result = BDD_ID_0; // is this correct??
             }
         }
     } else {
@@ -246,4 +246,26 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
         result_id = f; 
     }
     return result_id;
+}
+BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b){
+    return -1;
+}
+
+BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b){
+    return -1;
+}
+
+BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b){
+    return -1;
+}
+BDD_ID Manager::neg(const BDD_ID a){
+    return -1;
+}
+
+BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b){
+    return -1;
+}
+
+BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b){
+    return -1;
 }

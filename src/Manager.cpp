@@ -272,8 +272,6 @@ BDD_ID Manager::neg(const BDD_ID a) {
         } else {
             result = BDD_ID_0;
         }
-    } else if (isVariable(a)) {
-        result = uniqueTable.at(a).low;
     } else {
         result = ite(a, BDD_ID_0, BDD_ID_1);
     }

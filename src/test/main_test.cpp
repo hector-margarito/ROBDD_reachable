@@ -206,12 +206,16 @@ TEST (ManagerTest_Operation, ManagerShouldSolveNegOperation) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
-    BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
 
-    EXPECT_EQ(BDD_ID_0, manager->neg(varA_ID));
+    EXPECT_EQ(4, manager->neg(varA_ID));
     EXPECT_EQ(BDD_ID_1, manager->neg(BDD_ID_0));
     EXPECT_EQ(BDD_ID_0, manager->neg(BDD_ID_1));
-    EXPECT_EQ(6, manager->neg(AandB_ID));
+
+    BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
+    BDD_ID negAndB_ID = manager->neg(AandB_ID);
+    EXPECT_EQ(7, negAndB_ID);
+
+    EXPECT_EQ(varA_ID, manager->topVar(negAndB_ID));
 }
 
 int main(int argc, char* argv[]) {

@@ -43,7 +43,7 @@ bool Manager::isConstant(const BDD_ID id) {
 }
 
 bool Manager::isVariable(const BDD_ID id) {
-    return !isConstant(id) && id == topVar (id);
+    return !isConstant(id) && id == topVar(id);
 }
 
 BDD_ID Manager::topVar(const BDD_ID id) {
@@ -51,7 +51,7 @@ BDD_ID Manager::topVar(const BDD_ID id) {
 }
 
 std::string Manager::getTopVarName(const BDD_ID &root) {
-    return uniqueTable.at(root).label;
+    return uniqueTable.at(topVar(root)).label;
 }
 
 void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
@@ -59,6 +59,9 @@ void Manager::findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root) {
         vars_of_root.insert(root);
     } else if (!isConstant(root)) {
         BDD_Node_t rootNode = uniqueTable.at(root);
+        if (vars_of_root.find(rootNode.topvar) == vars_of_root.end()) {
+            vars_of_root.insert(rootNode.topvar);
+        }
         findVars(rootNode.high, vars_of_root);
         findVars(rootNode.low, vars_of_root);
     }

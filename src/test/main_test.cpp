@@ -51,52 +51,77 @@ TEST (ManagerTest_TopVar, BDDNodeShouldHaveTopVar) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
 
     EXPECT_EQ(BDD_ID_0, manager->topVar(BDD_ID_0));
     EXPECT_EQ(BDD_ID_1, manager->topVar(BDD_ID_1));
     EXPECT_EQ(varA_ID, manager->topVar(varA_ID));
     EXPECT_EQ(varB_ID, manager->topVar(varB_ID));
+    EXPECT_EQ(varA_ID, manager->topVar(AandB_ID));
 }
 
 TEST (ManagerTest_GetTopVarName, BDDNodeShouldHaveTopVarName) { 
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID varC_ID = manager->createVar("c");
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
 
     EXPECT_STREQ("0", manager->getTopVarName(BDD_ID_0).c_str());
     EXPECT_STREQ("1", manager->getTopVarName(BDD_ID_1).c_str());
     EXPECT_STREQ("a", manager->getTopVarName(varA_ID).c_str());
     EXPECT_STREQ("b", manager->getTopVarName(varB_ID).c_str());
+    EXPECT_STREQ("a", manager->getTopVarName(AandB_ID).c_str());
 }
 
 TEST (ManagerTest_FindVars, ManagerShouldFindVariables) { 
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID varC_ID = manager->createVar("b");
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
 
-    std::set<BDD_ID> vars;
+    std::set<BDD_ID> vars, vars_AandB;
     manager->findVars(BDD_ID_0, vars);
     EXPECT_TRUE(vars.empty());
 
     manager->findVars(varA_ID, vars);
     EXPECT_EQ(1, vars.size());
-    
-    std::set<unsigned long>::iterator it;
-    for (it = vars.begin(); it != vars.end(); ++it) {
-        BDD_ID var = *it;
-        EXPECT_TRUE(manager->isVariable(var));
-    }   
+
+    BDD_ID varA_aux = *vars.find(varA_ID);
+    EXPECT_TRUE(manager->isVariable(varA_aux));
+    EXPECT_EQ(varA_ID, varA_aux);
+
+    manager->findVars(AandB_ID, vars_AandB);
+
+    EXPECT_EQ(2, vars_AandB.size());
+    EXPECT_EQ(varA_ID, *(vars_AandB.find(varA_ID)));
+    EXPECT_EQ(varB_ID, *(vars_AandB.find(varB_ID)));
 }
 
 TEST (ManagerTest_FindNodes, ManagerShouldFindNodes) { 
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
 
-    std::set<BDD_ID> vars;
-    manager->findNodes(BDD_ID_0, vars);
-    EXPECT_EQ(1, vars.size());
+    std::set<BDD_ID> vars_1, vars_2, vars_3;
+    manager->findNodes(BDD_ID_0, vars_1);
+    EXPECT_EQ(1, vars_1.size());
 
-    manager->findNodes(varA_ID, vars);
-    EXPECT_EQ(3, vars.size()); // We should expect the own variable a and the terminal nodes 0 and 1    
+    manager->findNodes(varA_ID, vars_2);
+    // We should expect the own variable a and the terminal nodes 0 and 1    
+    EXPECT_EQ(3, vars_2.size()); 
+    EXPECT_EQ(varA_ID, *(vars_2.find(varA_ID)));
+    EXPECT_EQ(BDD_ID_0, *(vars_2.find(BDD_ID_0)));
+    EXPECT_EQ(BDD_ID_1, *(vars_2.find(BDD_ID_1)));
+
+    BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
+    manager->findNodes(AandB_ID, vars_3);
+    EXPECT_EQ(4, vars_3.size());
+    EXPECT_EQ(AandB_ID, *(vars_3.find(AandB_ID)));
+    EXPECT_EQ(varB_ID, *(vars_3.find(varB_ID)));
+    EXPECT_EQ(BDD_ID_0, *(vars_3.find(BDD_ID_0)));
+    EXPECT_EQ(BDD_ID_1, *(vars_3.find(BDD_ID_1)));
 }
 
 TEST (ManagerTest_ITE, ManagerShouldCreateNodeFromOperation) { 
@@ -164,8 +189,6 @@ TEST (ManagerTest_Operation, ManagerShouldSolveAndOperation) {
     AandB_ID_2 = manager->and2(varB_ID, varA_ID);
     EXPECT_EQ(AandB_ID, AandB_ID_2);
     EXPECT_EQ(5, manager->uniqueTableSize());
-
-    
 }
 
 TEST (ManagerTest_Operation, ManagerShouldSolveOrOperation) { 

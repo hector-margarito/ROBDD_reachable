@@ -250,25 +250,27 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
     }
     return result_id;
 }
-BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b){
+
+BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b) {
     return ite(a,b,0);
 }
 
-BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b){
+BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b) {
     return ite(a,1,b);
 }
 
-BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b){
-    return -1;
-}
-BDD_ID Manager::neg(const BDD_ID a){
+BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
     return -1;
 }
 
-BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b){
+BDD_ID Manager::neg(const BDD_ID a) {
     return -1;
 }
 
-BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b){
+BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
+    return -1;
+}
+
+BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {
     return -1;
 }

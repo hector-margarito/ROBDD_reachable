@@ -202,6 +202,18 @@ TEST (ManagerTest_Operation, ManagerShouldSolveOrOperation) {
     EXPECT_EQ(AorB_ID, AorB_ID_2);
 }
 
+TEST (ManagerTest_Operation, ManagerShouldSolveNegOperation) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
+
+    EXPECT_EQ(BDD_ID_0, manager->neg(varA_ID));
+    EXPECT_EQ(BDD_ID_1, manager->neg(BDD_ID_0));
+    EXPECT_EQ(BDD_ID_0, manager->neg(BDD_ID_1));
+    EXPECT_EQ(6, manager->neg(AandB_ID));
+}
+
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

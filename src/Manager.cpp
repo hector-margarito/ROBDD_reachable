@@ -281,7 +281,7 @@ BDD_ID Manager::neg(const BDD_ID a) {
 }
 
 BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
-    return -1;
+    return neg(and2(a,b));
 }
 
 BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {

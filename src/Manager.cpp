@@ -264,7 +264,21 @@ BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
 }
 
 BDD_ID Manager::neg(const BDD_ID a) {
-    return -1;
+    BDD_ID result;
+
+    if (isConstant(a)) {
+        if (a == BDD_ID_0) {
+            result = BDD_ID_1;
+        } else {
+            result = BDD_ID_0;
+        }
+    } else if (isVariable(a)) {
+        result = uniqueTable.at(a).low;
+    } else {
+        result = ite(a, BDD_ID_0, BDD_ID_1);
+    }
+
+    return result;
 }
 
 BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {

@@ -260,7 +260,8 @@ BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b) {
 }
 
 BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
-    return -1;
+    // XOR = (A AND !B) OR (!A AND B)
+    return or2(and2(a, neg(b)), and2(neg(a), b));
 }
 
 BDD_ID Manager::neg(const BDD_ID a) {

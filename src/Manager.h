@@ -17,7 +17,7 @@
 #include <sstream>
 #include "ManagerInterface.h"
 
-/** @brief ClassProject contains all of the BDD definitions
+/** @brief ClassProject contains all of the definitions for BDD
  * 
  */
 namespace ClassProject {
@@ -55,32 +55,88 @@ namespace ClassProject {
      */
     class Manager : public ManagerInterface {
         public:
-        /** @brief Constructor of Manager
-         *
-         * During construction leaf 0 and 1 are created
-         */
+            /** @brief Constructor of Manager
+             *
+             *  @details During construction leaf 0 and 1 are created
+             */
             Manager(std::string name);
 
+            /** @brief Creates a new variable for the BDD
+             *
+             *  @param[in] label - label of the new variable 
+             *  @return - #BDD_ID of the newly created variable 
+             */
             BDD_ID createVar(const std::string &label);
 
+            /** @brief Returns the ID representing True
+             *
+             *  @return - the #BDD_ID representing True 
+             */
             const BDD_ID &True();
 
+            /** @brief Returns the ID representing False
+             *
+             *  @return - the #BDD_ID representing False
+             */
             const BDD_ID &False();
 
+            /** @brief Returns true if 'f' is a leaf node
+             *
+             *  @param[in] f - Node ID to check
+             *  @return - true if 'f' is a leaf node
+             */
             bool isConstant(const BDD_ID f);
 
+            /** @brief Returns true if 'x' is a variable
+             *
+             *  @param[in] x - Node ID to check
+             *  @return - true if 'x' is a variable
+             */
             bool isVariable(const BDD_ID x);
 
+            /** @brief Returns the ID of top variable of the BDD node f
+             *
+             *  @param[in] f - Node ID to check
+             *  @return - #BDD_ID of top variable of the BDD node f
+             *  */
             BDD_ID topVar(const BDD_ID f);
 
+            /** @brief Return the name of top variable of the BDD node root
+             *
+             *  @param[in] root - Node ID to check
+             *  @return - name of the of the top variable of the specified root node
+             *  */
             std::string getTopVarName(const BDD_ID &root);
 
+            /** @brief Returns the set of variables which are either top variable of the BDD node root or the reachable nodes from root.
+             *
+             *  @param[in] root - Node root to check
+             *  @param[out] vars_of_root - set of variables that are top
+             *  variable or reachable node
+             *  */
             void findVars(const BDD_ID &root, std::set<BDD_ID> &vars_of_root);
 
+            /** @brief Returns the set of BDD nodes which are reachable from the BDD node root(including itself)
+             * 
+             *  @param[in] root - Node root to check
+             *  @param[out] nodes_of_root - set of nodes which are reable from
+             *  the BDD node root
+             *  */
             void findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root);
 
+            /** @brief Returns the number of the nodes currently exist in the unique table of the Manager class
+             *
+             * @return - number of nodes
+             */
             size_t uniqueTableSize();
 
+            /** @brief Implements the if-then-else algorithm
+             *
+             *  @param[in] i - Node i of the if-then-else algorithm
+             *  @param[in] t - Node t of the if-then-else algorithm
+             *  @param[in] e - Node e of the if-then-else algorithm
+             * @return - the #BDD_ID of the new node that represents the ITE
+             */
             BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
 
             BDD_ID coFactorTrue(const BDD_ID f, const BDD_ID x);

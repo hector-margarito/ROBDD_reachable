@@ -7,8 +7,8 @@ using namespace ClassProject;
 
 Manager::Manager(std::string name) : name(name) {
     bdd_count = 0;
-    createVar("0");
-    createVar("1");
+    createNode("0", BDD_ID_0, BDD_ID_0, BDD_ID_0);
+    createNode("1", BDD_ID_1, BDD_ID_1, BDD_ID_1);
 }
 
 BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
@@ -157,11 +157,17 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
 BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
     computed_key_t node_computed_key = std::make_tuple(top_var, high, low); 
     if (computedTable.find(node_computed_key) == computedTable.end()) {
-        BDD_ID new_ID = createNode("", top_var, high, low);
+        BDD_ID new_ID = createNode(getLabel(top_var, high, low), top_var, high, low);
         computedTable.insert(std::make_pair(node_computed_key, new_ID));
         return new_ID;
     }
     return computedTable.at(node_computed_key);
+}
+
+std::string Manager::getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
+    std::stringstream sstm;
+    sstm << top_var << "," << high << "," << low;
+    return sstm.str();
 }
 
 bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
@@ -307,7 +313,9 @@ void Manager::printTable() {
 
     std::cout << std::endl << "\t\t[ UNIQUE TABLE ]" << std::endl << std::endl;
 
-    std::cout << "\t|\t"    
+    std::cout << "\t|\t"  
+                << "LABEL"  
+                << '\t'
                 << "ID"
                 << '\t'
                 << "TOPVAR"
@@ -321,6 +329,8 @@ void Manager::printTable() {
 
     for (it = uniqueTable.begin(); it != uniqueTable.end(); it++) {
         std::cout << "\t|\t"    
+                << it->second.label
+                << '\t' 
                 << it->second.bdd 
                 << '\t'
                 << it->second.topvar

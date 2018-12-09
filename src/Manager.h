@@ -94,6 +94,8 @@ namespace ClassProject {
 
             BDD_ID nor2(const BDD_ID a, const BDD_ID b);
 
+            void printTable();
+
         private:
 
             bool isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e);

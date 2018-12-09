@@ -206,16 +206,19 @@ TEST (ManagerTest_Operation, ManagerShouldSolveNegOperation) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID varC_ID = manager->createVar("c");
 
-    EXPECT_EQ(4, manager->neg(varA_ID));
+    EXPECT_EQ(5, manager->neg(varA_ID));
     EXPECT_EQ(BDD_ID_1, manager->neg(BDD_ID_0));
     EXPECT_EQ(BDD_ID_0, manager->neg(BDD_ID_1));
 
     BDD_ID AandB_ID = manager->and2(varA_ID, varB_ID);
     BDD_ID negAndB_ID = manager->neg(AandB_ID);
-    EXPECT_EQ(7, negAndB_ID);
+    EXPECT_EQ(8, negAndB_ID);
 
     EXPECT_EQ(varA_ID, manager->topVar(negAndB_ID));
+    manager->neg(manager->or2(varA_ID,manager->and2(varB_ID,manager->neg(varC_ID))));
+    manager->printTable();
 }
 
 TEST (ManagerTest_Operation, ManagerShouldSolveXorOperation) { 
@@ -235,11 +238,13 @@ TEST (ManagerTest_Operation, ManagerShouldSolveNorOperation) {
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
 
+
     EXPECT_FALSE(manager->nor2(BDD_ID_0, BDD_ID_1));
     EXPECT_FALSE(manager->nor2(BDD_ID_1, BDD_ID_0));
     EXPECT_TRUE(manager->nor2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->nor2(BDD_ID_1, BDD_ID_1));
     EXPECT_EQ(6, manager->nor2(varA_ID, varB_ID));
+    manager->printTable();
 }
 
 TEST (ManagerTest_Operation, ManagerShouldSolveNandOperation) { 

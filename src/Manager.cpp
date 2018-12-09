@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "Manager.h"
+#include <unordered_map>
 
 using namespace ClassProject;
 
@@ -226,13 +227,22 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f) {
     std::cout << "Manager::coFactorTrue\n f = " << f << "\n"; 
     if (!isConstant(f)) {
         BDD_Node_t node_f = uniqueTable.at(f);
-        std::cout << "node_f.id: " << f << "\n"; 
-        BDD_ID co_high = coFactorTrue(node_f.high);
-        BDD_ID co_low = coFactorTrue(node_f.low);
-        result_id = ite(node_f.topvar, co_high, co_low);
+        if (f != node_f.topvar) {
+            std::cout << "node_f.id: " << f << "\n"; 
+            std::cout << "node_f.high: " << node_f.high << "\n"; 
+            std::cout << "node_f.low: " << node_f.low << "\n"; 
+            BDD_ID co_high = coFactorTrue(node_f.high);
+            BDD_ID co_low = coFactorTrue(node_f.low);
+
+            std::cout << "call ite (" << node_f.topvar << ", " <<  co_high << "," << co_low << ",)\n"; 
+            result_id = ite(node_f.topvar, co_high, co_low);
+        } else {
+            result_id = f;
+        }
     } else {
         result_id = f; 
     }
+    std::cout << "end of coFactorTrue result = " << result_id << std::endl;
     return result_id;
 }
 
@@ -278,6 +288,9 @@ BDD_ID Manager::neg(const BDD_ID a) {
     }
 
     return result;
+
+    // BDD_Node_t node_a = uniqueTable.at(a);
+    // return ite(a, node_a.low, node_a.high);
 }
 
 BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
@@ -286,4 +299,37 @@ BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
 
 BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {
     return neg(or2(a,b));
+}
+
+
+void Manager::printTable() {
+    std::unordered_map<BDD_ID,BDD_Node_t>::iterator it;
+
+    std::cout << std::endl << "\t\t[ UNIQUE TABLE ]" << std::endl << std::endl;
+
+    std::cout << "\t|\t"    
+                << "ID"
+                << '\t'
+                << "TOPVAR"
+                << '\t'
+                << "HIGH"
+                << '\t'
+                << "LOW"
+                << "\t|" 
+                << std::endl 
+                << std::endl;
+
+    for (it = uniqueTable.begin(); it != uniqueTable.end(); it++) {
+        std::cout << "\t|\t"    
+                << it->second.bdd 
+                << '\t'
+                << it->second.topvar
+                << '\t'
+                << it->second.high
+                << '\t'
+                << it->second.low
+                << "\t|" 
+                << std::endl 
+                << std::endl;
+    }
 }

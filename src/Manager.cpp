@@ -94,7 +94,8 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     if (hasKey(i) && hasKey(t) && hasKey(e)) {
         // Check first for terminal case
         if (!isTerminal(i,t,e)){
-            if (computedTable.find(std::make_tuple(i,t,e)) == computedTable.end()){
+            computed_key_t node_computed_key = std::make_tuple(i,t,e);
+            if (computedTable.find(node_computed_key) == computedTable.end()){
                 BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
                 BDD_Node_t node_x = uniqueTable.at(top_var_x);
@@ -107,7 +108,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
                     id_result = r_high;
                 }
             } else {
-                id_result = computedTable.at(std::make_tuple(i, t, e));
+                id_result = computedTable.at(node_computed_key);
             }
         } else {
             id_result = getTerminalCaseId(i, t, e);

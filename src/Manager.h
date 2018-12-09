@@ -17,7 +17,11 @@
 #include <sstream>
 #include "ManagerInterface.h"
 
+/** @brief ClassProject contains all of the BDD definitions
+ * 
+ */
 namespace ClassProject {
+
     typedef std::tuple<BDD_ID,BDD_ID,BDD_ID> computed_key_t;
     struct key_hash : public std::unary_function<computed_key_t, std::size_t> {
        std::size_t operator()(const computed_key_t& k) const {
@@ -46,8 +50,15 @@ namespace ClassProject {
         BDD_ID topvar;
     } BDD_Node_t;
 
+    /** @class Manager class implements ManagerInterface that was provided.
+     *
+     */
     class Manager : public ManagerInterface {
         public:
+        /** @brief Constructor of Manager
+         *
+         * During construction leaf 0 and 1 are created
+         */
             Manager(std::string name);
 
             BDD_ID createVar(const std::string &label);

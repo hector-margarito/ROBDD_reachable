@@ -18,13 +18,17 @@
  */
 namespace ClassProject {
 
+    /** Used for creating keys for our computed table */
     typedef std::tuple<BDD_ID,BDD_ID,BDD_ID> computed_key_t;
+
+    /** A hash of a tuple of 3 elements to guarantee they are unique */
     struct key_hash : public std::unary_function<computed_key_t, std::size_t> {
        std::size_t operator()(const computed_key_t& k) const {
           return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
        }
     };
 
+    /** Compare the elements of the tuple */
     struct key_equal : public std::binary_function<computed_key_t, computed_key_t, bool> {
        bool operator()(const computed_key_t& v0, const computed_key_t& v1) const {
            return (
@@ -34,16 +38,19 @@ namespace ClassProject {
             );
        }
     };
-
+    
+    /** BDD_ID representing 0 leaf */
     const BDD_ID BDD_ID_0 = 0;
+    /** BDD_ID representing 1 leaf */
     const BDD_ID BDD_ID_1 = 1;
 
+    /** Structure that a BDD node will contain */
     typedef struct BDD_Node_t {
-        std::string label;
-        BDD_ID bdd;
-        BDD_ID high;
-        BDD_ID low;
-        BDD_ID topvar;
+        std::string label; /**< label of the node */
+        BDD_ID bdd; /**< bdd id of the node */
+        BDD_ID high; /**< bdd high */
+        BDD_ID low;  /**< bdd low */
+        BDD_ID topvar; /**< top var variable */
     } BDD_Node_t;
 
     /** @class Manager class implements ManagerInterface that was provided.

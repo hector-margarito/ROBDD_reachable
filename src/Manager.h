@@ -381,12 +381,6 @@ namespace ClassProject {
 
             /** The computed table map used to have a quick access to BDD_ID */
             std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> computedTable;
-
-            /** False */
-            const BDD_ID BDD_ID_False = 0;
-
-            /** True */
-            const BDD_ID BDD_ID_True = 1;
     };
 }
 #endif

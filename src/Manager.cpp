@@ -7,8 +7,8 @@ using namespace ClassProject;
 
 Manager::Manager(std::string name) : name(name) {
     bdd_count = 0;
-    createNode("0", BDD_ID_0, BDD_ID_0, BDD_ID_0);
-    createNode("1", BDD_ID_1, BDD_ID_1, BDD_ID_1);
+    createNode("0", False(), False(), False());
+    createNode("1", True(), True(), True());
 }
 
 BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
@@ -24,7 +24,7 @@ BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const
 }
 
 BDD_ID Manager::createVar(const std::string &label) {
-    return createNode(label, bdd_count, BDD_ID_1, BDD_ID_0);
+    return createNode(label, bdd_count, True(), False());
 }
 
 size_t Manager::uniqueTableSize() {
@@ -32,11 +32,11 @@ size_t Manager::uniqueTableSize() {
 }
 
 const BDD_ID &Manager::False() {
-    return BDD_ID_False;
+    return BDD_ID_0;
 }
 
 const BDD_ID &Manager::True() {
-    return BDD_ID_True;
+    return BDD_ID_1;
 }
 
 bool Manager::isConstant(const BDD_ID id) {
@@ -120,17 +120,17 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
 }
 
 BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
-    BDD_ID id_result = BDD_ID_0;
+    BDD_ID id_result = False();
     /* Check each terminal case to return the appropiate response */
     if (isConstant(i)) {
-        if (BDD_ID_1 == i) {
+        if (True() == i) {
             id_result = t;
         } else {
             id_result = e;
         }
     } else if (t == e) {
         id_result = t;
-    } else if (t == BDD_ID_1 && e == BDD_ID_0) {
+    } else if (t == True() && e == False()) {
         id_result = i;
     }
     return id_result;
@@ -153,7 +153,7 @@ std::string Manager::getLabel(const BDD_ID top_var, const BDD_ID high, const BDD
 }
 
 bool Manager::isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
-    return isConstant(i) || ((t == BDD_ID_1) && (e == BDD_ID_0)) || (t == e);
+    return isConstant(i) || ((t == True()) && (e == False())) || (t == e);
 }
 
 bool Manager::isTerminal(const BDD_ID f, const BDD_ID x) {
@@ -207,11 +207,11 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
 }
 
 BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b) {
-    return ite(a,b,0);
+    return ite(a,b,False());
 }
 
 BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b) {
-    return ite(a,1,b);
+    return ite(a,True(),b);
 }
 
 BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
@@ -223,13 +223,13 @@ BDD_ID Manager::neg(const BDD_ID a) {
     BDD_ID result;
 
     if (isConstant(a)) {
-        if (a == BDD_ID_0) {
-            result = BDD_ID_1;
+        if (a == False()) {
+            result = True();
         } else {
-            result = BDD_ID_0;
+            result = False();
         }
     } else {
-        result = ite(a, BDD_ID_0, BDD_ID_1);
+        result = ite(a, False(), True());
     }
 
     return result;

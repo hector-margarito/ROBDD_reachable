@@ -92,7 +92,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
 
     std::cout << "Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
     // check first if the IDs are in the terminal
-    if (hasKey(i) && hasKey(t) && hasKey(e)){
+    if (hasKey(i) && hasKey(t) && hasKey(e)) {
         // Check first for terminal case
         if (!isTerminal(i,t,e)){
             if (computedTable.find(std::make_tuple(i,t,e)) == computedTable.end()){
@@ -136,19 +136,17 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
         } else {
             std::cout << "TERMINAL CASE: Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
             /* Check each terminal case to return the appropiate response */
-            if(isConstant(i)){
+            if(isConstant(i)) {
                 if(BDD_ID_1 == i) id_result = t;
                 else id_result = e;
-            }else{
+            } else {
                 if(t == e) id_result = t;
                 else if((t == BDD_ID_1) && (e == BDD_ID_0)) id_result = i;
                 else if((t == BDD_ID_0) && (e == BDD_ID_1)) id_result = BDD_ID_0; // is this correct??
             }
         }
     } else {
-        // do we nedd to add to the table?
-        // Mostlikely an exception
-        //
+       //throw std::invalid_argument("At least one of the nodes is invalid.");
     }
     std::cout << "[Manager::ite] " << "id_result = " << id_result << std::endl;
     return id_result;

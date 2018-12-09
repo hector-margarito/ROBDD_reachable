@@ -125,11 +125,8 @@ TEST_F(ManagerTest, ITE_ManagerShouldCreateNodeFromOperation) {
 
     // f = (A or B) and (C and D) 
     BDD_ID AorB_ID = manager->ite(varA_ID, 1, varB_ID);
-    std::cout << "========== A or B END    ===========\n";
     BDD_ID CandD_ID = manager->ite(varC_ID, varD_ID, BDD_ID_0);
-    std::cout << "========== C and D END   ===========\n";
     BDD_ID AND_ID = manager->ite(AorB_ID, CandD_ID, 0);
-    std::cout << "========== Final AND END ===========\n";
 
     EXPECT_EQ(6,AorB_ID);
     EXPECT_EQ(7,CandD_ID);
@@ -238,7 +235,7 @@ TEST_F(ManagerTest, Operation_NEG_ManagerShouldSolveNegOperation) {
 
     EXPECT_EQ(varA_ID, manager->topVar(negAndB_ID));
     manager->neg(manager->or2(varA_ID,manager->and2(varB_ID,manager->neg(varC_ID))));
-    manager->printTable();
+    //manager->printTable();
 }
 
 TEST_F(ManagerTest, Operation_XOR_ManagerShouldSolveXorOperation) { 
@@ -262,7 +259,7 @@ TEST_F(ManagerTest, Operation_NOR_ManagerShouldSolveNorOperation) {
     EXPECT_TRUE(manager->nor2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->nor2(BDD_ID_1, BDD_ID_1));
     EXPECT_EQ(6, manager->nor2(varA_ID, varB_ID));
-    manager->printTable();
+    //manager->printTable();
 }
 
 TEST_F(ManagerTest, Operation_NAND_ManagerShouldSolveNandOperation) { 

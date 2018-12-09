@@ -342,7 +342,7 @@ namespace ClassProject {
             BDD_ID findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
 
             /**
-             * @brief Get the smallest node ID
+             * @brief Get the smallest node ID which is not a constant
              * 
              * @param x - node 1
              * @param y - node 2
@@ -359,6 +359,16 @@ namespace ClassProject {
              * @return std::string - the label
              */
             std::string getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
+
+            /**
+             * @brief Get the Terminal Case Id
+             * 
+             * @param i 
+             * @param t 
+             * @param e 
+             * @return BDD_ID - the id of the terminal node
+             */
+            BDD_ID getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e);
 
             /** Name of the manager */
             std::string name;

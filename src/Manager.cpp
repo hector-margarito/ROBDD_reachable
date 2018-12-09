@@ -90,50 +90,48 @@ BDD_ID Manager::getMin(const BDD_ID x, const BDD_ID y) {
 BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     BDD_ID id_result;
 
-    std::cout << "Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
     // check first if the IDs are in the terminal
     if (hasKey(i) && hasKey(t) && hasKey(e)) {
         // Check first for terminal case
         if (!isTerminal(i,t,e)){
             if (computedTable.find(std::make_tuple(i,t,e)) == computedTable.end()){
                 BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
-                std::cout << "ITE: top_var_x: " << top_var_x << "\n";
 
                 BDD_Node_t node_x = uniqueTable.at(top_var_x);
-                BDD_ID r_high; 
-                BDD_ID r_low;
-
-                r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
-                r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
-
-                std::cout << "r_high: " << r_high << "\n";
-                std::cout << "r_low: " << r_low << "\n";
+                BDD_ID r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
+                BDD_ID r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
 
                 if (r_high != r_low) {
                     id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
                 } else { 
                     id_result = r_high;
-                    std::cout << "R_HIGH: " << r_high << " Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
                 }
             } else {
-                std::cout << "GET FROM UNIQUE TABLE: Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
                 id_result = computedTable.at(std::make_tuple(i, t, e));
             }
         } else {
-            std::cout << "TERMINAL CASE: Manager::ite( " << i << ", " << t << ", " << e << ")" << std::endl;
-            /* Check each terminal case to return the appropiate response */
-            if(isConstant(i)) {
-                if(BDD_ID_1 == i) id_result = t;
-                else id_result = e;
-            } else {
-                if(t == e) id_result = t;
-                else if((t == BDD_ID_1) && (e == BDD_ID_0)) id_result = i;
-            }
+            id_result = getTerminalCaseId(i, t, e);
         }
     } else {
        throw std::invalid_argument("At least one of the nodes is invalid.");
     }
-    std::cout << "[Manager::ite] " << "id_result = " << id_result << std::endl;
+    return id_result;
+}
+
+BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
+    BDD_ID id_result = BDD_ID_0;
+    /* Check each terminal case to return the appropiate response */
+    if (isConstant(i)) {
+        if (BDD_ID_1 == i) {
+            id_result = t;
+        } else {
+            id_result = e;
+        }
+    } else if (t == e) {
+        id_result = t;
+    } else if (t == BDD_ID_1 && e == BDD_ID_0) {
+        id_result = i;
+    }
     return id_result;
 }
 
@@ -167,18 +165,12 @@ bool Manager::hasKey(const BDD_ID id) {
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
     BDD_ID result_id;
-    std::cout << "Manager::coFactorTrue\n f: " << f << "  x: " << x << "\n";
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
-        std::cout << "node_f: " << node_f.bdd << "\n";
         if (topVar(f) != x) {
             BDD_ID co_high = coFactorTrue(node_f.high, x);
-            std::cout << "co_high: " << co_high << "\n";
             BDD_ID co_low = coFactorTrue(node_f.low, x);
-            std::cout << "co_low: " << co_low << "\n";
-            std::cout << "node_f.topvar: " << node_f.topvar << "\n";
             result_id = ite(node_f.topvar, co_high, co_low);
-            std::cout << "result_id: " << result_id << "\n";
         } else {
             result_id = node_f.high;
         }
@@ -190,18 +182,12 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
     BDD_ID result_id;
-    std::cout << "Manager::coFactorFalse\n f = " << f << "  x: " << x << "\n";
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
-        std::cout << "node_f: " << node_f.bdd << "\n";
         if (topVar(f) != x) {
             BDD_ID co_high = coFactorFalse(node_f.high, x);
-            std::cout << "co_high: " << co_high << "\n";
             BDD_ID co_low = coFactorFalse(node_f.low, x);
-            std::cout << "co_low: " << co_low << "\n";
-            std::cout << "node_f.topvar: " << node_f.topvar << "\n";
             result_id = ite(node_f.topvar, co_high, co_low);
-            std::cout << "result_id: " << result_id << "\n";
         } else {
             result_id = node_f.low;
         }

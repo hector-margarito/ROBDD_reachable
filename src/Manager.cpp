@@ -146,7 +146,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             }
         }
     } else {
-       //throw std::invalid_argument("At least one of the nodes is invalid.");
+       throw std::invalid_argument("At least one of the nodes is invalid.");
     }
     std::cout << "[Manager::ite] " << "id_result = " << id_result << std::endl;
     return id_result;

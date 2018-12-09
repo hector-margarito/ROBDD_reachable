@@ -360,16 +360,23 @@ namespace ClassProject {
              */
             std::string getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
 
+            /** Name of the manager */
             std::string name;
+
+            /** The ID of the next BDD node */
             BDD_ID bdd_count;
+
+            /** The unique table map used to keep the BDD nodes*/
             std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
+
+            /** The computed table map used to have a quick access to BDD_ID */
             std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> computedTable;
+
+            /** False */
             const BDD_ID BDD_ID_False = 0;
+
+            /** True */
             const BDD_ID BDD_ID_True = 1;
     };
 }
 #endif
-
-// Local Variables:
-// mode: c++
-// End:

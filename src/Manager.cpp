@@ -231,18 +231,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f) {
 }
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f) {
-    BDD_ID result_id;
-    std::cout << "Manager::coFactorFalse\n f = " << f << "\n"; 
-    if (!isConstant(f)) {
-        BDD_Node_t node_f = uniqueTable.at(f);
-        std::cout << "node_f.id: " << f << "\n"; 
-        BDD_ID co_high = coFactorFalse(node_f.high);
-        BDD_ID co_low = coFactorFalse(node_f.low);
-        result_id = ite(node_f.topvar, co_high, co_low);
-    } else {
-        result_id = f; 
-    }
-    return result_id;
+    return uniqueTable.at(f).low;
 }
 
 BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b) {

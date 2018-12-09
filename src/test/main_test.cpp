@@ -159,6 +159,7 @@ TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) {
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID varC_ID = manager->createVar("c");
 
     BDD_ID AandB_ID = manager->ite(varA_ID, varB_ID, BDD_ID_0);
     EXPECT_EQ(BDD_ID_0, manager->coFactorTrue(BDD_ID_0, BDD_ID_0));
@@ -166,6 +167,7 @@ TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) {
     EXPECT_EQ(varA_ID, manager->coFactorTrue(varA_ID, BDD_ID_0));
     EXPECT_EQ(varA_ID, manager->coFactorTrue(varA_ID, BDD_ID_1));
     EXPECT_EQ(varB_ID, manager->coFactorTrue(AandB_ID, varA_ID));
+    EXPECT_EQ(AandB_ID, manager->coFactorTrue(AandB_ID, varC_ID));
 }
 
 TEST (ManagerTest_CofactorTrue, ManagerShouldSolveCofactorTrueForOneNode) { 

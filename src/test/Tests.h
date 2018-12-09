@@ -4,6 +4,23 @@
 #include "gtest/gtest.h"
 #include "../Manager.h"
 
+using namespace ClassProject;
+
+class ManagerTest: public ::testing::Test { 
+
+public: 
+    ManagerTest();
+
+    void SetUp();
+
+    void TearDown();
+
+    ~ManagerTest();
+
+ protected:
+    Manager *manager;  
+};
+
 
 #endif //VDS_PROJECT_TESTS_H
 

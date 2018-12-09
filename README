@@ -1,0 +1,17 @@
+Project class for Verification of Digital Systems class
+Group 5: Bruno Pessanha, Hector Margarito
+
+====== To compile  =======
+mkdir build && cd &_
+cmake ../
+make
+  
+ ====== To run test =======
+cd build/src/test
+./VDSProject_test
+
+build/  -- Contains the needed files for building and its executable results
+doc/    -- Contains the doxygen documentation
+src/    -- Contiains all source files
+
+To add more Gtests, please include them in src/test/main_test.cpp

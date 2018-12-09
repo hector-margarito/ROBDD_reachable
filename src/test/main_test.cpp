@@ -176,7 +176,7 @@ TEST (ManagerTest_CofactorTrue, ManagerShouldSolveCofactorTrueForOneNode) {
 
     EXPECT_EQ(BDD_ID_0, manager->coFactorTrue(BDD_ID_0));
     EXPECT_EQ(BDD_ID_1, manager->coFactorTrue(BDD_ID_1));
-    EXPECT_EQ(varA_ID, manager->coFactorTrue(varA_ID));
+    EXPECT_EQ(BDD_ID_1, manager->coFactorTrue(varA_ID));
     EXPECT_EQ(varB_ID, manager->coFactorTrue(AandB_ID));
 }
 

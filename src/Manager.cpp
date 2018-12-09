@@ -195,7 +195,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
             result_id = ite(node_f.topvar, co_high, co_low);
             std::cout << "result_id: " << result_id << "\n";
         } else {
-            result_id = coFactorTrue(node_f.high);
+            result_id = node_f.high;
         }
     } else {
         result_id = f;
@@ -227,27 +227,7 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
 }
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f) {
-    BDD_ID result_id;
-    std::cout << "Manager::coFactorTrue\n f = " << f << "\n"; 
-    if (!isConstant(f)) {
-        BDD_Node_t node_f = uniqueTable.at(f);
-        if (f != node_f.topvar) {
-            std::cout << "node_f.id: " << f << "\n"; 
-            std::cout << "node_f.high: " << node_f.high << "\n"; 
-            std::cout << "node_f.low: " << node_f.low << "\n"; 
-            BDD_ID co_high = coFactorTrue(node_f.high);
-            BDD_ID co_low = coFactorTrue(node_f.low);
-
-            std::cout << "call ite (" << node_f.topvar << ", " <<  co_high << "," << co_low << ",)\n"; 
-            result_id = ite(node_f.topvar, co_high, co_low);
-        } else {
-            result_id = f;
-        }
-    } else {
-        result_id = f; 
-    }
-    std::cout << "end of coFactorTrue result = " << result_id << std::endl;
-    return result_id;
+    return uniqueTable.at(f).high;
 }
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f) {

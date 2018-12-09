@@ -103,22 +103,8 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
                 BDD_ID r_high; 
                 BDD_ID r_low;
 
-                // Depending on the top variable apply to the correct node
-                if(top_var_x == topVar(i)){
-                    BDD_Node_t node_i = uniqueTable.at(i);
-                    r_high = ite(node_i.high,t,e);
-                    r_low = ite(node_i.low,t,e);
-                }
-                else if(top_var_x == topVar(t)){
-                    BDD_Node_t node_t = uniqueTable.at(t);
-                    r_high = ite(i,node_t.high,e);
-                    r_low = ite(i,node_t.low,e);
-                }
-                else if(top_var_x == topVar(e)){
-                    BDD_Node_t node_e = uniqueTable.at(e);
-                    r_high = ite(i,t,node_e.high);
-                    r_low = ite(i,t,node_e.low);
-                }
+                r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
+                r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
 
                 std::cout << "r_high: " << r_high << "\n";
                 std::cout << "r_low: " << r_low << "\n";
@@ -142,7 +128,6 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             } else {
                 if(t == e) id_result = t;
                 else if((t == BDD_ID_1) && (e == BDD_ID_0)) id_result = i;
-                else if((t == BDD_ID_0) && (e == BDD_ID_1)) id_result = BDD_ID_0; // is this correct??
             }
         }
     } else {

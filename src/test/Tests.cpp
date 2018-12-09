@@ -249,7 +249,7 @@ TEST_F(ManagerTest, Operation_XOR_ManagerShouldSolveXorOperation) {
     EXPECT_TRUE(manager->xor2(BDD_ID_1, BDD_ID_0));
     EXPECT_FALSE(manager->xor2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->xor2(BDD_ID_1, BDD_ID_1));
-    EXPECT_EQ(10, manager->xor2(varA_ID, varB_ID));
+    EXPECT_EQ(8, manager->xor2(varA_ID, varB_ID));
 }
 
 TEST_F(ManagerTest, Operation_NOR_ManagerShouldSolveNorOperation) { 

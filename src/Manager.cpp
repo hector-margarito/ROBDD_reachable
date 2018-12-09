@@ -274,7 +274,6 @@ BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {
     return neg(or2(a,b));
 }
 
-
 void Manager::printTable() {
     std::unordered_map<BDD_ID,BDD_Node_t>::iterator it;
 

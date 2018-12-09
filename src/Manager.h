@@ -139,26 +139,150 @@ namespace ClassProject {
              */
             BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
 
+            /**
+             * @brief Returns the positive cofactor of the function defined by <B>f</B> with respect to function <B>x</B>. 
+             * 
+             * @details Example: coFactorFalse(node_ID_f, node_ID_X);
+             * 
+             * @param[in] f - ID of the node f
+             * @param[in] x - ID of the node x
+             * 
+             * @return Returns the BDD_ID of the positive co-factor of node <B>f</B>
+             * 
+             */
             BDD_ID coFactorTrue(const BDD_ID f, const BDD_ID x);
 
+            /**
+             * @brief Returns the negative cofactor of the function defined by <B>f</B> with respect to function <B>x</B>. 
+             * 
+             * @details Example: coFactorFalse(node_ID_f, node_ID_X);
+             * 
+             * @param[in] f - ID of the node f
+             * @param[in] x - ID of the node x
+             * 
+             * @return Returns the BDD_ID of the negative co-factor of node <B>f</B>
+             * 
+             */
             BDD_ID coFactorFalse(const BDD_ID f, const BDD_ID x);
 
+            /**
+             * @brief Returns the positive cofactor of the function defined by node <B>f</B>
+             * 
+             * @details Example: coFactorTrue(node_ID);
+             * 
+             * @param[in] f - ID of the node
+             * 
+             * @return Returns the BDD_ID of the positive co-factor of node <B>f</B>
+             * 
+             */
             BDD_ID coFactorTrue(const BDD_ID f);
 
+            /**
+             * @brief Returns the negative cofactor of the function defined by node <B>f</B>
+             * 
+             * @details Example: coFactorFalse(node_ID);
+             * 
+             * @param[in] f - ID of the node
+             * 
+             * @return Returns the BDD_ID of the negative co-factor of node <B>f</B>
+             * 
+             */
             BDD_ID coFactorFalse(const BDD_ID f);
             
+            /**
+             * @brief AND operation. The operation of <B>A AND B</B>.
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: and2(node1_ID, node2_ID);
+             * 
+             * @param[in] a - ID of first node
+             * @param[in] b - ID of second node
+             * 
+             * @return Returns the BDD_ID of the new OR node
+             * 
+             */
             BDD_ID and2(const BDD_ID a, const BDD_ID b);
 
+            /**
+             * @brief OR operation. The operation of <B>A OR B</B>
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: or2(node1_ID, node2_ID);
+             * 
+             * @param[in] a - ID of first node
+             * @param[in] b - ID of second node
+             * 
+             * @return Returns the BDD_ID of the new OR node
+             * 
+             */
             BDD_ID or2(const BDD_ID a, const BDD_ID b);
 
+            /**
+             * @brief Exclusive OR (aka XOR) operation. Using AND and OR, the following operation is executed: 
+             * <B>(A AND !B) OR (!A AND B)</B>
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: xor2(node1_ID, node2_ID);
+             * 
+             * @param[in] a - ID of first node
+             * @param[in] b - ID of second node
+             * 
+             * @return Returns the BDD_ID of the new XOR node
+             * 
+             */
             BDD_ID xor2(const BDD_ID a, const BDD_ID b);
 
+            /**
+             * @brief NEG operation. The negation of node A (<B>!A</B>)
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: neg(node_ID);
+             * 
+             * @param[in] a - ID of node to be negated
+             * 
+             * @return Returns the BDD_ID of the new negated node
+             * 
+             */
             BDD_ID neg(const BDD_ID a);
 
+            /**
+             * @brief NAND operation. The negation of <B>A AND B</B>
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: nand2(node1_ID, node2_ID);
+             * 
+             * @param[in] a - ID of first node
+             * @param[in] b - ID of second node
+             * 
+             * @return Returns the BDD_ID of the new NAND node
+             * 
+             */
             BDD_ID nand2(const BDD_ID a, const BDD_ID b);
 
+            /**
+             * @brief NOR operation. The negation of <B>A OR B</B>
+             * 
+             * If this node does not exist, creates a new node represeting it or retrieves the ID of the existing node.
+             * 
+             * @details Example: nor2(node1_ID, node2_ID);
+             * 
+             * @param[in] a - ID of first node
+             * @param[in] b - ID of second node
+             * 
+             * @return Returns the BDD_ID of the new NOR node
+             * 
+             */
             BDD_ID nor2(const BDD_ID a, const BDD_ID b);
 
+            /**
+             * @brief Prints the content of the unique table for debugging purposes
+             *
+             */
             void printTable();
 
         private:

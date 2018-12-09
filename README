@@ -5,13 +5,16 @@ Group 5: Bruno Pessanha, Hector Margarito
 mkdir build && cd &_
 cmake ../
 make
+make doc
   
  ====== To run test =======
 cd build/src/test
 ./VDSProject_test
 
+
 build/  -- Contains the needed files for building and its executable results
-doc/    -- Contains the doxygen documentation
+build/doc_doxygen/ -- contains doxygen documentation
+doc/    -- Contains the doxygen file configuration
 src/    -- Contiains all source files
 
-To add more Gtests, please include them in src/test/main_test.cpp
+To add more Gtests, please include them in src/test/Test.cpp

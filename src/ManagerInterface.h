@@ -1,7 +1,3 @@
-//
-// Created by ludwig on 01.03.16.
-//
-
 #ifndef PROJECT_MANAGERINTERFACE_H
 #define PROJECT_MANAGERINTERFACE_H
 

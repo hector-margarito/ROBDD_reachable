@@ -261,9 +261,6 @@ BDD_ID Manager::neg(const BDD_ID a) {
     }
 
     return result;
-
-    // BDD_Node_t node_a = uniqueTable.at(a);
-    // return ite(a, node_a.low, node_a.high);
 }
 
 BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
@@ -276,36 +273,12 @@ BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {
 
 void Manager::printTable() {
     std::unordered_map<BDD_ID,BDD_Node_t>::iterator it;
-
     std::cout << std::endl << "\t\t[ UNIQUE TABLE ]" << std::endl << std::endl;
-
-    std::cout << "\t|\t"  
-                << "LABEL"  
-                << '\t'
-                << "ID"
-                << '\t'
-                << "TOPVAR"
-                << '\t'
-                << "HIGH"
-                << '\t'
-                << "LOW"
-                << "\t|" 
-                << std::endl 
-                << std::endl;
+    std::cout << "\t|\t"  << "LABEL"  << '\t' << "ID" << '\t' << "TOPVAR" << '\t' 
+        << "HIGH" << '\t' << "LOW" << "\t|" << std::endl  << std::endl;
 
     for (it = uniqueTable.begin(); it != uniqueTable.end(); it++) {
-        std::cout << "\t|\t"    
-                << it->second.label
-                << '\t' 
-                << it->second.bdd 
-                << '\t'
-                << it->second.topvar
-                << '\t'
-                << it->second.high
-                << '\t'
-                << it->second.low
-                << "\t|" 
-                << std::endl 
-                << std::endl;
+        std::cout << "\t|\t" << it->second.label<< '\t' << it->second.bdd << '\t'<< it->second.topvar 
+            << '\t'<< it->second.high<< '\t'<< it->second.low<< "\t|" << std::endl << std::endl;
     }
 }

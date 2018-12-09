@@ -1,7 +1,3 @@
-// A minimalistic BDD library, following Wolfgang Kunz lecture slides
-//
-// Written by Markus Wedler 2014
-
 #ifndef mwBDD_H
 #define mwBDD_H
 
@@ -287,12 +283,74 @@ namespace ClassProject {
 
         private:
 
+            /**
+             * @brief Checks whether a node is terminal for ITE function
+             * 
+             * @param i - first node
+             * @param t - then node
+             * @param e - else node
+             * @return true - when this is a terminal case for ITE
+             * @return false - when it is not
+             */
             bool isTerminal(const BDD_ID i, const BDD_ID t, const BDD_ID e);
+
+            /**
+             * @brief  Checkes whether a node is terminal for CoFactor functions
+             * 
+             * @param f 
+             * @param x 
+             * @return true - when this is a terminal case for CoFactor
+             * @return false - when it is not
+             */
             bool isTerminal(const BDD_ID f, const BDD_ID x);
+
+            /**
+             * @brief Checks whether the BDD has the key id in its unique table
+             * 
+             * @param id 
+             * @return true 
+             * @return false 
+             */
             bool hasKey(const BDD_ID id);
+
+            /**
+             * @brief Creates a BDD Node
+             * 
+             * @param label 
+             * @param top_var 
+             * @param high 
+             * @param low 
+             * @return BDD_ID 
+             */
             BDD_ID createNode(const std::string &label, const BDD_ID top_var, const  BDD_ID high, const BDD_ID low);
+
+            /**
+             * @brief Tries to finds a node with those parameters and adds it the the unique table when it is not found
+             * 
+             * @param top_var 
+             * @param high 
+             * @param low 
+             * @return BDD_ID 
+             */
             BDD_ID findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
+
+            /**
+             * @brief Get the smallest node ID
+             * 
+             * @param x - node 1
+             * @param y - node 2
+             * @return BDD_ID - the ID of the smallest node
+             */
             BDD_ID getMin(const BDD_ID x, const BDD_ID y);
+
+            /**
+             * @brief Get the Label of the node
+             * 
+             * @param top_var - top variable
+             * @param high 
+             * @param low 
+             * @return std::string - the label
+             */
             std::string getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
 
             std::string name;

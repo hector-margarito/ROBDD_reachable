@@ -102,7 +102,7 @@ namespace ClassProject {
             BDD_ID createNode(const std::string &label, const BDD_ID top_var, const  BDD_ID high, const BDD_ID low);
             BDD_ID findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
             BDD_ID getMin(const BDD_ID x, const BDD_ID y);
-            std::string getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low)
+            std::string getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low);
 
             std::string name;
             BDD_ID bdd_count;

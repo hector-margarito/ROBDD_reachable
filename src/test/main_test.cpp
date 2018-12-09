@@ -145,6 +145,16 @@ TEST (ManagerTest_ITE, ManagerShouldCreateNodeFromOperation) {
     EXPECT_EQ(10, manager->uniqueTableSize());
 }
 
+TEST (ManagerTest_ITE, ManagerShouldThrowExceptionForUnkwnownNode) { 
+    ClassProject::Manager *manager = new Manager("TestManager");
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+
+    EXPECT_THROW(manager->ite(varA_ID, varB_ID, 100), std::invalid_argument);
+    EXPECT_THROW(manager->ite(100, varB_ID, varA_ID), std::invalid_argument);
+    EXPECT_THROW(manager->ite(varA_ID, 100, varB_ID), std::invalid_argument);
+}
+
 TEST (ManagerTest_Cofactor, ManagerShouldSolveCofactorTrue) { 
     ClassProject::Manager *manager = new Manager("TestManager");
     BDD_ID varA_ID = manager->createVar("a");

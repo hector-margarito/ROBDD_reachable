@@ -13,6 +13,11 @@
         "typeinfo": "cpp",
         "algorithm": "cpp",
         "set": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "iosfwd": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp"
     }
 }

@@ -134,6 +134,16 @@ TEST_F(ManagerTest, ITE_ManagerShouldCreateNodeFromOperation) {
     EXPECT_EQ(10, manager->uniqueTableSize());
 }
 
+TEST_F(ManagerTest, ITE_ManagerShouldDoReduction) { 
+    BDD_ID varA_ID = manager->createVar("a");
+    BDD_ID varB_ID = manager->createVar("b");
+    BDD_ID AandB_ID = manager->and2(varA_ID,varB_ID);
+    BDD_ID AandNotB = manager->and2(varA_ID,manager->neg(varB_ID));
+    BDD_ID or_ID = manager->or2(AandB_ID,AandNotB);
+
+    EXPECT_EQ(varA_ID,or_ID);
+}
+
 TEST_F(ManagerTest, ITE_ManagerShouldThrowExceptionForUnkwnownNode) { 
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");

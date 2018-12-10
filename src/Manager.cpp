@@ -19,6 +19,7 @@ BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const
     node.high  = high;
     node.low = low;
     uniqueTable.insert(std::make_pair(node.bdd,node));
+    computedTable.insert(std::make_pair(std::make_tuple(top_var, high, low), node.bdd));
     bdd_count++;
     return node.bdd;
 }
@@ -140,7 +141,6 @@ BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, co
     computed_key_t node_computed_key = std::make_tuple(top_var, high, low); 
     if (computedTable.find(node_computed_key) == computedTable.end()) {
         BDD_ID new_ID = createNode(getLabel(top_var, high, low), top_var, high, low);
-        computedTable.insert(std::make_pair(node_computed_key, new_ID));
         return new_ID;
     }
     return computedTable.at(node_computed_key);

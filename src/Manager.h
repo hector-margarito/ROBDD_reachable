@@ -58,7 +58,13 @@ namespace ClassProject {
      */
     class Manager : public ManagerInterface {
         public:
-            /** @brief Constructor of Manager
+            /** @brief Defaut Constructor of Manager
+             *
+             *  @details During construction leaf 0 and 1 are created
+             */
+            Manager();
+
+            /** @brief Constructor of Manager with name as parameter
              *
              *  @details During construction leaf 0 and 1 are created
              */
@@ -289,6 +295,12 @@ namespace ClassProject {
             void printTable();
 
         private:
+
+            /**
+             * @brief called during constructor to create leaf nodes and start bdd_count
+             *
+             */
+            void setInitValues();
 
             /**
              * @brief Checks whether a node is terminal for ITE function

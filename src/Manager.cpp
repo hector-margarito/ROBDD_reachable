@@ -5,7 +5,15 @@
 
 using namespace ClassProject;
 
+Manager::Manager(){
+    setInitValues();
+}
+
 Manager::Manager(std::string name) : name(name) {
+    setInitValues();
+}
+
+void Manager::setInitValues() {
     bdd_count = 0;
     createNode("0", False(), False(), False());
     createNode("1", True(), True(), True());

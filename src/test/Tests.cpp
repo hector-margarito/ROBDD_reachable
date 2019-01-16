@@ -127,11 +127,20 @@ TEST_F(ManagerTest, ITE_ManagerShouldCreateNodeFromOperation) {
     BDD_ID AorB_ID = manager->ite(varA_ID, 1, varB_ID);
     BDD_ID CandD_ID = manager->ite(varC_ID, varD_ID, BDD_ID_0);
     BDD_ID AND_ID = manager->ite(AorB_ID, CandD_ID, 0);
+    // Term cases check, no new nodes created
+    BDD_ID TermCase_1 = manager->ite(1,varA_ID,varB_ID);
+    BDD_ID TermCase_2 = manager->ite(0,varA_ID,varB_ID);
+    BDD_ID TermCase_3 = manager->ite(varC_ID,varA_ID,varA_ID);
+    BDD_ID TermCase_4 = manager->ite(varA_ID,BDD_ID_1,BDD_ID_0);
 
     EXPECT_EQ(6,AorB_ID);
     EXPECT_EQ(7,CandD_ID);
     EXPECT_EQ(9,AND_ID);
     EXPECT_EQ(10, manager->uniqueTableSize());
+    EXPECT_EQ(varA_ID,TermCase_1);
+    EXPECT_EQ(varB_ID,TermCase_2);
+    EXPECT_EQ(varA_ID,TermCase_3);
+    EXPECT_EQ(varA_ID,TermCase_4);
 }
 
 TEST_F(ManagerTest, ITE_ManagerShouldDoReduction) { 

@@ -20,16 +20,15 @@ void Manager::setInitValues() {
 }
 
 BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
+    BDD_ID bdd_ID = bdd_count++;
     BDD_Node_t node;
     node.label = label;
-    node.bdd = bdd_count;
     node.topvar = top_var;
     node.high  = high;
     node.low = low;
-    uniqueTable.insert(std::make_pair(node.bdd,node));
-    computedTable.insert(std::make_pair(std::make_tuple(top_var, high, low), node.bdd));
-    bdd_count++;
-    return node.bdd;
+    uniqueTable.insert(std::make_pair(bdd_ID, node));
+    computedTable.insert(std::make_pair(std::make_tuple(top_var, high, low), bdd_ID));
+    return bdd_ID;
 }
 
 BDD_ID Manager::createVar(const std::string &label) {
@@ -99,31 +98,26 @@ BDD_ID Manager::getMin(const BDD_ID x, const BDD_ID y) {
 BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     BDD_ID id_result;
 
-    // check first if the IDs are in the terminal
-    if (hasKey(i) && hasKey(t) && hasKey(e)) {
-        // Check first for terminal case
-        if (!isTerminal(i,t,e)){
-            computed_key_t node_computed_key = std::make_tuple(i,t,e);
-            if (computedTable.find(node_computed_key) == computedTable.end()){
-                BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
+    // Check first for terminal case
+    if (!isTerminal(i,t,e)){
+        computed_key_t node_computed_key = std::make_tuple(i,t,e);
+        if (computedTable.find(node_computed_key) == computedTable.end()){
+            BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
-                BDD_Node_t node_x = uniqueTable.at(top_var_x);
-                BDD_ID r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
-                BDD_ID r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
+            BDD_Node_t node_x = uniqueTable.at(top_var_x);
+            BDD_ID r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
+            BDD_ID r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
 
-                if (r_high != r_low) {
-                    id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
-                } else { 
-                    id_result = r_high;
-                }
-            } else {
-                id_result = computedTable.at(node_computed_key);
+            if (r_high != r_low) {
+                id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
+            } else { 
+                id_result = r_high;
             }
         } else {
-            id_result = getTerminalCaseId(i, t, e);
+            id_result = computedTable.at(node_computed_key);
         }
     } else {
-       throw std::invalid_argument("At least one of the nodes is invalid.");
+        id_result = getTerminalCaseId(i, t, e);
     }
     return id_result;
 }
@@ -176,7 +170,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
     BDD_ID result_id;
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
-        if (topVar(f) != x) {
+        if (node_f.topvar != x) {
             BDD_ID co_high = coFactorTrue(node_f.high, x);
             BDD_ID co_low = coFactorTrue(node_f.low, x);
             result_id = ite(node_f.topvar, co_high, co_low);
@@ -193,7 +187,7 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
     BDD_ID result_id;
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
-        if (topVar(f) != x) {
+        if (node_f.topvar != x) {
             BDD_ID co_high = coFactorFalse(node_f.high, x);
             BDD_ID co_low = coFactorFalse(node_f.low, x);
             result_id = ite(node_f.topvar, co_high, co_low);
@@ -258,7 +252,7 @@ void Manager::printTable() {
         << "HIGH" << '\t' << "LOW" << "\t|" << std::endl  << std::endl;
 
     for (it = uniqueTable.begin(); it != uniqueTable.end(); it++) {
-        std::cout << "\t|\t" << it->second.label<< '\t' << it->second.bdd << '\t'<< it->second.topvar 
+        std::cout << "\t|\t" << it->second.label<< '\t' << it->first << '\t'<< it->second.topvar 
             << '\t'<< it->second.high<< '\t'<< it->second.low<< "\t|" << std::endl << std::endl;
     }
 }

@@ -24,7 +24,7 @@ namespace ClassProject {
     /** A hash of a tuple of 3 elements to guarantee they are unique */
     struct key_hash : public std::unary_function<computed_key_t, std::size_t> {
        std::size_t operator()(const computed_key_t& k) const {
-          return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
+          return (((long long)std::get<0>(k)) ^ (((long long)std::get<1>(k))<<32)) ^ ((long long)std::get<2>(k)<<32);
        }
     };
 
@@ -47,7 +47,6 @@ namespace ClassProject {
     /** Structure that a BDD node will contain */
     typedef struct BDD_Node_t {
         std::string label; /**< label of the node */
-        BDD_ID bdd; /**< bdd id of the node */
         BDD_ID high; /**< bdd high */
         BDD_ID low;  /**< bdd low */
         BDD_ID topvar; /**< top var variable */

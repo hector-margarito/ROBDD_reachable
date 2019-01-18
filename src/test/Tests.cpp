@@ -153,15 +153,6 @@ TEST_F(ManagerTest, ITE_ManagerShouldDoReduction) {
     EXPECT_EQ(varA_ID,or_ID);
 }
 
-TEST_F(ManagerTest, ITE_ManagerShouldThrowExceptionForUnkwnownNode) { 
-    BDD_ID varA_ID = manager->createVar("a");
-    BDD_ID varB_ID = manager->createVar("b");
-
-    EXPECT_THROW(manager->ite(varA_ID, varB_ID, 100), std::invalid_argument);
-    EXPECT_THROW(manager->ite(100, varB_ID, varA_ID), std::invalid_argument);
-    EXPECT_THROW(manager->ite(varA_ID, 100, varB_ID), std::invalid_argument);
-}
-
 TEST_F(ManagerTest, Cofactor_ManagerShouldSolveCofactorTrue) { 
     BDD_ID varA_ID = manager->createVar("a");
     BDD_ID varB_ID = manager->createVar("b");

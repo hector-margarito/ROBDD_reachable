@@ -18,7 +18,11 @@
         "ostream": "cpp",
         "iosfwd": "cpp",
         "functional": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "__functional_base": "cpp",
+        "optional": "cpp",
+        "variant": "cpp"
     },
-    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "C_Cpp.configurationWarnings": "Disabled"
 }

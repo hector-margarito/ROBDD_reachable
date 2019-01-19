@@ -20,7 +20,7 @@ TEST(managerTest, HowTo_Example) {
     //s0' = not(s0)
     functions.push_back(comp.neg(s0));
     //s1' = not(s1)
-    functions.push_back(comp.neg(s0));
+    functions.push_back(comp.neg(s1));
     //Add transition functions
     comp.setDelta(functions);
     //Add init state

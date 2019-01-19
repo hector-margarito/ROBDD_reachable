@@ -15,6 +15,9 @@ link_directories(${CMAKE_SOURCE_DIR}/src/bench/)
 include_directories(${CMAKE_SOURCE_DIR}/src/verify/)
 link_directories(${CMAKE_SOURCE_DIR}/src/verify/)
 
+include_directories(${CMAKE_SOURCE_DIR}/src/reachable/)
+link_directories(${CMAKE_SOURCE_DIR}/src/reachable/)
+
 set(GTEST_INCLUDE_DIR $ENV{GTEST_DIR})
 include_directories(${GTEST_INCLUDE_DIR}/include/)
 

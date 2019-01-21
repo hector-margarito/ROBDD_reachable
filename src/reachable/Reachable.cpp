@@ -17,7 +17,7 @@ Reachable::Reachable(unsigned int stateSize) : ReachableInterface(stateSize) {
 Reachable::~Reachable() {}
 
 BDD_ID Reachable::xnor2(BDD_ID a, BDD_ID b) { 
-     return neg(xor2(a,b));
+     return ite(a,b,neg(b));
 }
 
 const std::vector<BDD_ID> &Reachable::getStates() const {

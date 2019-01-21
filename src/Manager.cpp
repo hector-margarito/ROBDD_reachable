@@ -217,8 +217,7 @@ BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b) {
 }
 
 BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
-    // XOR = (A AND !B) OR (!A AND B)
-    return or2(and2(a, neg(b)), and2(neg(a), b));
+    return ite(a,neg(b),b);
 }
 
 BDD_ID Manager::neg(const BDD_ID a) {
@@ -238,11 +237,11 @@ BDD_ID Manager::neg(const BDD_ID a) {
 }
 
 BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b) {
-    return neg(and2(a,b));
+    return ite(a,neg(b),True());
 }
 
 BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b) {
-    return neg(or2(a,b));
+    return ite(a,False(),neg(b));
 }
 
 void Manager::printTable() {

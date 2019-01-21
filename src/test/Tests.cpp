@@ -256,7 +256,7 @@ TEST_F(ManagerTest, Operation_XOR_ManagerShouldSolveXorOperation) {
     EXPECT_TRUE(manager->xor2(BDD_ID_1, BDD_ID_0));
     EXPECT_FALSE(manager->xor2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->xor2(BDD_ID_1, BDD_ID_1));
-    EXPECT_EQ(8, manager->xor2(varA_ID, varB_ID));
+    EXPECT_EQ(5, manager->xor2(varA_ID, varB_ID));
 }
 
 TEST_F(ManagerTest, Operation_NOR_ManagerShouldSolveNorOperation) { 
@@ -268,7 +268,7 @@ TEST_F(ManagerTest, Operation_NOR_ManagerShouldSolveNorOperation) {
     EXPECT_FALSE(manager->nor2(BDD_ID_1, BDD_ID_0));
     EXPECT_TRUE(manager->nor2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->nor2(BDD_ID_1, BDD_ID_1));
-    EXPECT_EQ(6, manager->nor2(varA_ID, varB_ID));
+    EXPECT_EQ(5, manager->nor2(varA_ID, varB_ID));
     //manager->printTable();
 }
 
@@ -280,5 +280,5 @@ TEST_F(ManagerTest, Operation_NAND_ManagerShouldSolveNandOperation) {
     EXPECT_TRUE(manager->nand2(BDD_ID_1, BDD_ID_0));
     EXPECT_TRUE(manager->nand2(BDD_ID_0, BDD_ID_0));
     EXPECT_FALSE(manager->nand2(BDD_ID_1, BDD_ID_1));
-    EXPECT_EQ(6, manager->nand2(varA_ID, varB_ID));
+    EXPECT_EQ(5, manager->nand2(varA_ID, varB_ID));
 }

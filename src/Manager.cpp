@@ -86,13 +86,13 @@ void Manager::findNodes(const BDD_ID &root, std::set<BDD_ID> &nodes_of_root) {
 }
 
 BDD_ID Manager::getMin(const BDD_ID x, const BDD_ID y) {
-    bool x_isConstant = isConstant(x);
-    bool y_isConstant = isConstant(y);
-    if (!x_isConstant && !y_isConstant)
-        return std::min(x,y);
-    if (x_isConstant)
+    if (isConstant(x))
         return y;
-    return x;
+
+    if(isConstant(y))
+        return x;
+
+    return std::min(x,y);
 }
 
 BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){

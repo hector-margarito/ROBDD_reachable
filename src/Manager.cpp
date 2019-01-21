@@ -101,7 +101,8 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     // Check first for terminal case
     if (!isTerminal(i,t,e)){
         computed_key_t node_computed_key = std::make_tuple(i,t,e);
-        if (computedTable.find(node_computed_key) == computedTable.end()){
+        auto node = computedTable.find(node_computed_key);
+        if (node == computedTable.end()){
             BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
             BDD_Node_t node_x = uniqueTable.at(top_var_x);
@@ -114,7 +115,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
                 id_result = r_high;
             }
         } else {
-            id_result = computedTable.at(node_computed_key);
+            id_result = node->second;
         }
     } else {
         id_result = getTerminalCaseId(i, t, e);
@@ -141,11 +142,12 @@ BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e
 
 BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
     computed_key_t node_computed_key = std::make_tuple(top_var, high, low); 
-    if (computedTable.find(node_computed_key) == computedTable.end()) {
+    auto node = computedTable.find(node_computed_key);
+    if (node == computedTable.end()) {
         BDD_ID new_ID = createNode(getLabel(top_var, high, low), top_var, high, low);
         return new_ID;
     }
-    return computedTable.at(node_computed_key);
+    return node->second;
 }
 
 std::string Manager::getLabel(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {

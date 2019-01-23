@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(VDSProject CXX C)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 ${LLVM_CXX_FLAGS} ")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O2 -fPIC -std=c++11 ${LLVM_CXX_FLAGS} ")
 
 #Include dirs
 include_directories(${CMAKE_SOURCE_DIR}/src)

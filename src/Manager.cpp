@@ -89,7 +89,7 @@ BDD_ID Manager::getMin(const BDD_ID x, const BDD_ID y) {
     if (isConstant(x))
         return y;
 
-    if(isConstant(y))
+    if (isConstant(y))
         return x;
 
     return std::min(x,y);
@@ -105,7 +105,6 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
         if (node == computedTable.end()){
             BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
-            BDD_Node_t node_x = uniqueTable.at(top_var_x);
             BDD_ID r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
             BDD_ID r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
 
@@ -139,13 +138,10 @@ BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e
     }
     return id_result;
 }
-
 BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
-    computed_key_t node_computed_key = std::make_tuple(top_var, high, low); 
-    auto node = computedTable.find(node_computed_key);
+    auto node = computedTable.find(std::make_tuple(top_var, high, low));
     if (node == computedTable.end()) {
-        BDD_ID new_ID = createNode(getLabel(top_var, high, low), top_var, high, low);
-        return new_ID;
+        return createNode(getLabel(top_var, high, low), top_var, high, low);;
     }
     return node->second;
 }

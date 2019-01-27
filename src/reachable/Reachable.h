@@ -25,6 +25,7 @@ namespace ClassProject {
         ~Reachable();
 
     private:
+        size_t stateSize;
         std::vector<BDD_ID> states;
         std::vector<BDD_ID> transitions;
         BDD_ID getTransitionRelation(int index);

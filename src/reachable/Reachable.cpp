@@ -8,10 +8,16 @@
 using namespace ClassProject;
 
 Reachable::Reachable(unsigned int stateSize) : ReachableInterface(stateSize) {
-    this->states.reserve(stateSize);
+    this->stateSize = stateSize;
+    this->states.reserve(stateSize*2);
     for (int i = 0; i < stateSize; i++) {
-        this->states[i] = createVar("S" + std::to_string(i));
+        this->states.push_back(createVar("S" + std::to_string(i)));
+    } //todo: add the conjunction
+    for (int i = 0; i < stateSize; i++) {
+        this->states.push_back(createVar("S'" + std::to_string(i)));
     }
+    //std::cout << "INITIAL TABLE" << std::endl;
+    //printTable();
 }
 
 Reachable::~Reachable() {}
@@ -26,22 +32,23 @@ const std::vector<BDD_ID> &Reachable::getStates() const {
 
 void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions) {
     this->transitions = transitionFunctions;
-    for (int i = 0; i < transitions.size(); i++) {
-        createVar("S'" + std::to_string(i));
-    }
 }
 
 void Reachable::setInitState(const std::vector<bool>& stateVector) {
-    for (int i = 0; i < stateVector.size(); i++) {
-        this->states[i] = stateVector[i] ? this->states[i] : neg(this->states[i]);
+    for (int i = 0; i < stateVector.size() - 1; i++) {
+        and2(stateVector[i] ? this->states[i] : neg(this->states[i]), stateVector[i+1] ? this->states[i+1] : neg(this->states[i+1]));
     }
+    //std::cout << "INIT STATE" << std::endl;
+    //printTable();
 }
 
 BDD_ID Reachable::computeTransitionRelations() {
     BDD_ID relations_tau = getTransitionRelation(0);
-    for (int i = 1; i < states.size(); i++) {
+    for (int i = 1; i < stateSize; i++) {
         relations_tau = and2(relations_tau, getTransitionRelation(i));
     }
+    //std::cout << "TRANSITION RELATIONS" << std::endl;
+    //printTable();
     return relations_tau;
 }
 
@@ -51,7 +58,7 @@ BDD_ID Reachable::compute_reachable_states() {
 
 BDD_ID Reachable::compute_reachable_state(int state) {
     BDD_ID char_R = False();
-    if (states.size() > 0) {
+    if (stateSize > 0) {
         BDD_ID relations_tau = computeTransitionRelations();
         BDD_ID char_R_it = getCharacteristicFunction(state);
         int index = 0;
@@ -59,7 +66,7 @@ BDD_ID Reachable::compute_reachable_state(int state) {
             char_R = char_R_it;
             BDD_ID image = computeImage(index++, relations_tau, char_R);
             char_R_it = or2(char_R, image);
-        } while (char_R != char_R_it);
+        } while (index < stateSize - 1);
     }
     return char_R;
 }
@@ -70,11 +77,14 @@ BDD_ID Reachable::computeImage(int index, BDD_ID relations_tau, BDD_ID char_R) {
     BDD_ID temp2 = or2(coFactorTrue(temp1, states[index+1]), coFactorFalse(temp1, states[index+1]));
     BDD_ID img_S0S1_next = or2(coFactorTrue(temp2, states[index]), coFactorFalse(temp2, states[index]));
 
+    BDD_ID s0_prime = states[stateSize + index];
+    BDD_ID s1_prime = states[stateSize + index + 1];
+
     /*Compute img(s0,s1)*/
-    temp1 = and2(xnor2(states[index],transitions[index]), xnor2(states[index+1],transitions[index+1]));
+    temp1 = and2(xnor2(states[index],s0_prime), xnor2(states[index+1],s1_prime));
     temp2 = and2(temp1, img_S0S1_next);
-    BDD_ID temp3 = or2(coFactorTrue(temp2,transitions[index+1]), coFactorFalse(temp2, transitions[index+1]));
-    BDD_ID img_SOS1 = or2(coFactorTrue(temp3,transitions[index]), coFactorFalse(temp3,transitions[index]));
+    BDD_ID temp3 = or2(coFactorTrue(temp2, s1_prime), coFactorFalse(temp2, s1_prime));
+    BDD_ID img_SOS1 = or2(coFactorTrue(temp3, s0_prime), coFactorFalse(temp3, s0_prime));
 
     return img_SOS1;
 }
@@ -84,16 +94,18 @@ BDD_ID Reachable::getCharacteristicFunction(int index) {
 }
 
 BDD_ID Reachable::getTransitionRelation(int index) {
-    return or2( and2(neg(states[index]), transitions[index]), and2(states[index], neg(transitions[index])));
+    BDD_ID sPrime = this->states[stateSize + index];
+    return or2( and2(sPrime, this->transitions[index]), and2(neg(sPrime), neg(this->transitions[index])));
 }
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
-    bool isReachable = true;
-    for (int i = 0; i < stateVector.size() && isReachable; i++) {
-        isReachable = stateVector[i] ? 
-            states[i] == compute_reachable_state(states[i]) : 
-            neg(states[i]) == compute_reachable_state(neg(states[i]));
+    compute_reachable_states();
+    size_t sizeOfTable = uniqueTableSize();
+    //std::cout << "Initial Table Size:" <<  uniqueTableSize() << std::endl;
+    for (int i = 0; i < stateSize - 1; i++) {
+        and2(stateVector[i] ? this->states[i] : neg(this->states[i]), stateVector[i+1] ? this->states[i+1] : neg(this->states[i+1]));
     }
-    return isReachable;
+    //std::cout << "Final Table Size:" <<  uniqueTableSize() << std::endl;
+    return sizeOfTable == uniqueTableSize();
 }
 

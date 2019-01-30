@@ -394,6 +394,9 @@ namespace ClassProject {
 
             /** The computed table map used to have a quick access to BDD_ID */
             std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> computedTable;
+
+            /** The computed table map used to have a quick access to BDD_ID */
+            std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> reverseTable;
     };
 }
 #endif

@@ -27,7 +27,7 @@ BDD_ID Manager::createNode(const std::string &label, const BDD_ID top_var, const
     node.high  = high;
     node.low = low;
     uniqueTable.insert(std::make_pair(bdd_ID, node));
-    computedTable.insert(std::make_pair(std::make_tuple(top_var, high, low), bdd_ID));
+    reverseTable.insert(std::make_pair(std::make_tuple(top_var, high, low), bdd_ID));
     return bdd_ID;
 }
 
@@ -99,10 +99,10 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
     BDD_ID id_result;
 
     // Check first for terminal case
-    if (!isTerminal(i,t,e)){
+    if (!isTerminal(i,t,e)) {
         computed_key_t node_computed_key = std::make_tuple(i,t,e);
         auto node = computedTable.find(node_computed_key);
-        if (node == computedTable.end()){
+        if (node == computedTable.end()) {
             BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
             BDD_ID r_high = ite(coFactorTrue(i,top_var_x), coFactorTrue(t,top_var_x), coFactorTrue(e,top_var_x));
@@ -113,6 +113,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             } else { 
                 id_result = r_high;
             }
+            computedTable.insert(std::make_pair(node_computed_key, id_result));
         } else {
             id_result = node->second;
         }
@@ -139,8 +140,8 @@ BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e
     return id_result;
 }
 BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
-    auto node = computedTable.find(std::make_tuple(top_var, high, low));
-    if (node == computedTable.end()) {
+    auto node = reverseTable.find(std::make_tuple(top_var, high, low));
+    if (node == reverseTable.end()) {
         return createNode(getLabel(top_var, high, low), top_var, high, low);;
     }
     return node->second;
@@ -220,7 +221,6 @@ BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b) {
 
 BDD_ID Manager::neg(const BDD_ID a) {
     BDD_ID result;
-
     if (isConstant(a)) {
         if (a == False()) {
             result = True();
@@ -230,7 +230,6 @@ BDD_ID Manager::neg(const BDD_ID a) {
     } else {
         result = ite(a, False(), True());
     }
-
     return result;
 }
 

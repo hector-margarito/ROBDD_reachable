@@ -38,8 +38,6 @@ void Reachable::setInitState(const std::vector<bool>& stateVector) {
     for (int i = 0; i < stateVector.size() - 1; i++) {
         and2(stateVector[i] ? this->states[i] : neg(this->states[i]), stateVector[i+1] ? this->states[i+1] : neg(this->states[i+1]));
     }
-    //std::cout << "INIT STATE" << std::endl;
-    //printTable();
 }
 
 BDD_ID Reachable::computeTransitionRelations() {
@@ -99,13 +97,27 @@ BDD_ID Reachable::getTransitionRelation(int index) {
 }
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
-    compute_reachable_states();
-    size_t sizeOfTable = uniqueTableSize();
-    //std::cout << "Initial Table Size:" <<  uniqueTableSize() << std::endl;
+    BDD_ID representation_of_reachable_states = compute_reachable_states();
+    BDD_ID cofactors[stateSize];
+    BDD_ID universal_quant;
+
     for (int i = 0; i < stateSize - 1; i++) {
-        and2(stateVector[i] ? this->states[i] : neg(this->states[i]), stateVector[i+1] ? this->states[i+1] : neg(this->states[i+1]));
+        if(stateVector[i])
+            cofactors[i] = coFactorTrue(this->states[i],representation_of_reachable_states);
+        else
+            cofactors[i] = coFactorFalse(this->states[i],representation_of_reachable_states);
     }
-    //std::cout << "Final Table Size:" <<  uniqueTableSize() << std::endl;
-    return sizeOfTable == uniqueTableSize();
+
+    for (int i = 0; i < stateSize - 1; i++) {
+        if(0 == i) universal_quant = cofactors[i];
+        else{
+            universal_quant = and2(universal_quant,cofactors[i]);
+        }
+    }
+
+    if( universal_quant == representation_of_reachable_states) return true;
+    else false;
+
+
 }
 

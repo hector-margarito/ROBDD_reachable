@@ -34,9 +34,14 @@ void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions) {
 
 void Reachable::setInitState(const std::vector<bool>& stateVector) {
     BDD_ID state = BDD_ID_1;
-    for (int i = 0; i < stateSize; i++) {
+    for (int i = 0; i < stateSize - 1; i++) {
         state = and2(state, stateVector[i] ? this->states[i] : neg(this->states[i]));
+        characteristic_S0 = and2(
+            xnor2(this->states[i], stateVector[i]),
+            xnor2(this->states[i+1], stateVector[i+1])
+        );
     }
+    and2(state, stateVector[stateSize] ? this->states[stateSize] : neg(this->states[stateSize]));
 }
 
 BDD_ID Reachable::computeTransitionRelations() {
@@ -50,7 +55,7 @@ BDD_ID Reachable::computeTransitionRelations() {
 BDD_ID Reachable::compute_reachable_states() {
     BDD_ID char_R;
     BDD_ID relations_tau = computeTransitionRelations();
-    BDD_ID char_R_it = getCharacteristicFunction();
+    BDD_ID char_R_it = characteristic_S0;
 
     do {
         char_R = char_R_it;
@@ -82,14 +87,6 @@ BDD_ID Reachable::computeImage(BDD_ID relations_tau, BDD_ID char_R) {
     }
 
     return img_SOS1;
-}
-
-BDD_ID Reachable::getCharacteristicFunction() {
-    BDD_ID characteristc = BDD_ID_1;
-    for (int i = 0; i < stateSize - 1; i++) { 
-        characteristc = and2(xnor2(states[i],0),xnor2(states[i+1], 0));
-    }
-    return characteristc;
 }
 
 BDD_ID Reachable::getTransitionRelation(int index) {

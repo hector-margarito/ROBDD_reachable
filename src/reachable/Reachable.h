@@ -29,9 +29,9 @@ namespace ClassProject {
         std::vector<BDD_ID> states;
         std::vector<BDD_ID> transitions;
         BDD_ID getTransitionRelation(int index);
-        BDD_ID getCharacteristicFunction();
         BDD_ID computeTransitionRelations();
         BDD_ID computeImage(BDD_ID relations_tau, BDD_ID char_R);
+        BDD_ID characteristic_S0;
     };
 }
 #endif //VDSPROJECT_IMGCOMP_H

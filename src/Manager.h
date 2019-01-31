@@ -24,9 +24,9 @@ namespace ClassProject {
     /** A hash of a tuple of 3 elements to guarantee they are unique */
     struct key_hash : public std::unary_function<computed_key_t, std::size_t> {
        std::size_t operator()(const computed_key_t& k) const {
-          return std::get<0>(k) ^ 
-                ((std::get<1>(k) << 1) >> 1) ^ 
-                (std::get<2>(k) << 1);
+          return (std::get<0>(k)) ^ 
+                (std::get<1>(k)<<32) ^ 
+                (std::get<2>(k));
        }
     };
 
@@ -390,12 +390,12 @@ namespace ClassProject {
             BDD_ID bdd_count;
 
             /** The unique table map used to keep the BDD nodes*/
-            std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable;
+            std::unordered_map<BDD_ID,BDD_Node_t> uniqueTable; 
 
             /** The computed table map used to have a quick access to BDD_ID */
             std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> computedTable;
 
-            /** The computed table map used to have a quick access to BDD_ID */
+            /** The reverse table map used to have a quick access to BDD_ID */
             std::unordered_map<computed_key_t,BDD_ID,key_hash,key_equal> reverseTable;
     };
 }

@@ -96,12 +96,12 @@ BDD_ID Manager::getMin(const BDD_ID x, const BDD_ID y) {
 }
 
 BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
-    BDD_ID id_result;
-
     // Check first for terminal case
     if (!isTerminal(i,t,e)) {
+
         computed_key_t node_computed_key = std::make_tuple(i,t,e);
         auto node = computedTable.find(node_computed_key);
+
         if (node == computedTable.end()) {
             BDD_ID top_var_x = getMin(getMin(topVar(i), topVar(t)), topVar(e));
 
@@ -109,35 +109,34 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e){
             BDD_ID r_low = ite(coFactorFalse(i,top_var_x), coFactorFalse(t,top_var_x), coFactorFalse(e,top_var_x));
 
             if (r_high != r_low) {
-                id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
+                BDD_ID id_result = findOrAddUniqueTable(top_var_x, r_high, r_low);
+                computedTable.insert(std::make_pair(node_computed_key, id_result));
+                return id_result;
             } else { 
-                id_result = r_high;
+                return r_high;
             }
-            computedTable.insert(std::make_pair(node_computed_key, id_result));
         } else {
-            id_result = node->second;
+            return node->second;
         }
     } else {
-        id_result = getTerminalCaseId(i, t, e);
+        return getTerminalCaseId(i, t, e);
     }
-    return id_result;
 }
 
 BDD_ID Manager::getTerminalCaseId(const BDD_ID i, const BDD_ID t, const BDD_ID e) {
-    BDD_ID id_result = False();
     /* Check each terminal case to return the appropiate response */
     if (isConstant(i)) {
         if (True() == i) {
-            id_result = t;
+            return t;
         } else {
-            id_result = e;
+            return e;
         }
     } else if (t == e) {
-        id_result = t;
+        return t;
     } else if (t == True() && e == False()) {
-        id_result = i;
+        return i;
     }
-    return id_result;
+    return False();
 }
 BDD_ID Manager::findOrAddUniqueTable(const BDD_ID top_var, const BDD_ID high, const BDD_ID low) {
     auto node = reverseTable.find(std::make_tuple(top_var, high, low));
@@ -166,37 +165,35 @@ bool Manager::hasKey(const BDD_ID id) {
 }
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x) {
-    BDD_ID result_id;
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
         if (node_f.topvar != x) {
             BDD_ID co_high = coFactorTrue(node_f.high, x);
             BDD_ID co_low = coFactorTrue(node_f.low, x);
-            result_id = ite(node_f.topvar, co_high, co_low);
+
+            return ite(node_f.topvar, co_high, co_low);
         } else {
-            result_id = node_f.high;
+            return node_f.high;
         }
     } else {
-        result_id = f;
+        return f;
     }
-    return result_id;
 }
 
 BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x) {
-    BDD_ID result_id;
     if (!isTerminal(f,x)) {
         BDD_Node_t node_f = uniqueTable.at(f);
         if (node_f.topvar != x) {
             BDD_ID co_high = coFactorFalse(node_f.high, x);
             BDD_ID co_low = coFactorFalse(node_f.low, x);
-            result_id = ite(node_f.topvar, co_high, co_low);
+
+            return ite(node_f.topvar, co_high, co_low);
         } else {
-            result_id = node_f.low;
+            return node_f.low;
         }
     } else {
-        result_id = f;
+        return f;
     }
-    return result_id;
 }
 
 BDD_ID Manager::coFactorTrue(const BDD_ID f) {

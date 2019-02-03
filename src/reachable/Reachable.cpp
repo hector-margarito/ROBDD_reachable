@@ -104,6 +104,9 @@ bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
         if(-1 == characteristic_S0)
             throw std::runtime_error("No init state defined");
 
+        if(this->transitions.empty())
+            throw std::runtime_error("No deltas defined");
+
         BDD_ID reachable = compute_reachable_states();
         for (int i = 0; i < stateSize && reachable; i++) {
             reachable = stateVector[i] ? coFactorTrue(reachable, this->states[i]) : coFactorFalse(reachable, this->states[i]);

@@ -34,14 +34,16 @@ void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions) {
 
 void Reachable::setInitState(const std::vector<bool>& stateVector) {
     BDD_ID state = BDD_ID_1;
-    for (int i = 0; i < stateSize - 1; i++) {
+    BDD_ID char_xnor;
+    characteristic_S0 = BDD_ID_1;
+
+    for (int i = 0; i < stateSize; i++) {
         state = and2(state, stateVector[i] ? this->states[i] : neg(this->states[i]));
-        characteristic_S0 = and2(
-            xnor2(this->states[i], stateVector[i]),
-            xnor2(this->states[i+1], stateVector[i+1])
-        );
+
+        // Determining characteristic func s0
+        char_xnor = xnor2(this->states[i], stateVector[i]);
+        characteristic_S0 = and2(characteristic_S0,char_xnor);
     }
-    and2(state, stateVector[stateSize] ? this->states[stateSize] : neg(this->states[stateSize]));
 }
 
 BDD_ID Reachable::computeTransitionRelations() {
@@ -96,6 +98,7 @@ BDD_ID Reachable::getTransitionRelation(int index) {
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
     BDD_ID reachable = compute_reachable_states();
+
     for (int i = 0; i < stateSize && reachable; i++) {
         reachable = stateVector[i] ? coFactorTrue(reachable, this->states[i]) : coFactorFalse(reachable, this->states[i]);
     }

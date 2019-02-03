@@ -16,6 +16,8 @@ Reachable::Reachable(unsigned int stateSize) : ReachableInterface(stateSize) {
     for (int i = 0; i < stateSize; i++) {
         this->states.push_back(createVar("S'" + std::to_string(i)));
     }
+    // For error detection of no setInitState() before reachability check
+    characteristic_S0 = -1;
 }
 
 Reachable::~Reachable() {}
@@ -97,11 +99,22 @@ BDD_ID Reachable::getTransitionRelation(int index) {
 }
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
-    BDD_ID reachable = compute_reachable_states();
+    bool result = false;
+    try{
+        if(-1 == characteristic_S0)
+            throw std::runtime_error("No init state defined");
 
-    for (int i = 0; i < stateSize && reachable; i++) {
-        reachable = stateVector[i] ? coFactorTrue(reachable, this->states[i]) : coFactorFalse(reachable, this->states[i]);
+        BDD_ID reachable = compute_reachable_states();
+        for (int i = 0; i < stateSize && reachable; i++) {
+            reachable = stateVector[i] ? coFactorTrue(reachable, this->states[i]) : coFactorFalse(reachable, this->states[i]);
+        }
+        result = (reachable == BDD_ID_1)? true: false;
     }
-    return reachable == BDD_ID_1;
+    catch(std::runtime_error &e){
+        std::cout << "Caught a runtime_error exception: "
+                  << e.what () << '\n';
+        result = false;
+    }
+    return result;
 }
 

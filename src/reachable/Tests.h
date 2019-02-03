@@ -46,13 +46,8 @@ TEST(managerTest, exceptionErrorCheck_noInitState) {
     functions.push_back(comp.neg(s1));
     //Add transition functions
     comp.setDelta(functions);
-    //Add init state
-    //comp.setInitState({false,false});
 
-    ASSERT_TRUE(comp.is_reachable({true,true}));
-    ASSERT_TRUE(comp.is_reachable({false,false}));
-    ASSERT_FALSE(comp.is_reachable({true,false}));
-    ASSERT_FALSE(comp.is_reachable({false,true}));
+    ASSERT_FALSE(comp.is_reachable({true,true}));
 }
 
 

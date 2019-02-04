@@ -43,8 +43,8 @@ void Reachable::setInitState(const std::vector<bool>& stateVector) {
 }
 
 BDD_ID Reachable::computeTransitionRelations() {
-    BDD_ID relations_tau = BDD_ID_1;
-    for (int i = 0; i < stateSize; i++) {
+    BDD_ID relations_tau = getTransitionRelation(0);
+    for (int i = 1; i < stateSize; i++) {
         relations_tau = and2(relations_tau, getTransitionRelation(i));
     }
     return relations_tau;
@@ -69,33 +69,32 @@ BDD_ID Reachable::computeImage(BDD_ID relations_tau, BDD_ID char_R) {
     BDD_ID s0_prime, s1_prime;
     BDD_ID temp1, temp2, temp3;
 
-    temp1 = and2(char_R, relations_tau);
-    for (int i = 1; i < stateSize; i++) {
-        temp2 = or2(coFactorTrue(temp1, states[i]), coFactorFalse(temp1, states[i]));
+    /* Compute image of S primes */
+    img_S0S1_prime = and2(char_R, relations_tau);
+    for (int i = 0; i < stateSize; i++) {
+        img_S0S1_prime = or2(coFactorTrue(img_S0S1_prime, states[i]), coFactorFalse(img_S0S1_prime, states[i]));
     }
-    img_S0S1_prime = or2(coFactorTrue(temp2, states[0]), coFactorFalse(temp2, states[0]));
-
-    for (int i = 0; i < stateSize - 1; i++) {
-        s0_prime = states[stateSize + i];
-        s1_prime = states[stateSize + i + 1];
-        temp1 = and2(xnor2(states[i],s0_prime), xnor2(states[i+1],s1_prime));
-    }
-
-    temp2 = and2(temp1, img_S0S1_prime);
+    
+    /* Compute image of S */
+    temp1 = xnor2(states[0],states[stateSize]);
     for (int i = 1; i < stateSize; i++) {
         s1_prime = states[stateSize + i];
-        temp3 = or2(coFactorTrue(temp2, s1_prime), coFactorFalse(temp2, s1_prime));
+        temp1 = and2(temp1, xnor2(states[i],s1_prime));
+        temp2 = and2(temp1, img_S0S1_prime);
     }
 
-    s0_prime = states[stateSize];
-    img_SOS1 = or2(coFactorTrue(temp3, s0_prime), coFactorFalse(temp3, s0_prime));
-
+    img_SOS1 = or2(coFactorTrue(temp2, states[stateSize]), coFactorFalse(temp2, states[stateSize]));
+    for (int i = 1; i < stateSize; i++) {
+        s0_prime = states[stateSize + i];
+        img_SOS1 = or2(coFactorTrue(img_SOS1, s0_prime), coFactorFalse(img_SOS1, s0_prime));
+    }
+    
     return img_SOS1;
 }
 
 BDD_ID Reachable::getTransitionRelation(int index) {
     BDD_ID sPrime = this->states[stateSize + index];
-    return or2( and2(sPrime, this->transitions[index]), and2(neg(sPrime), neg(this->transitions[index])));
+    return or2(and2(sPrime, this->transitions[index]), and2(neg(sPrime), neg(this->transitions[index])));
 }
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {

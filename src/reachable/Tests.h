@@ -86,11 +86,12 @@ TEST(managerTest, More_than_2_states) {
     //Add transition functions
     comp.setDelta(functions);
     //Add init state
-    comp.setInitState({false,false,true});
+    comp.setInitState({false,false,false});
 
-    ASSERT_TRUE(comp.is_reachable({true,true,false}));
+    ASSERT_TRUE(comp.is_reachable({true,true,true}));
     ASSERT_TRUE(comp.is_reachable({false,false,false}));
-    ASSERT_FALSE(comp.is_reachable({true,false,false}));
+    ASSERT_FALSE(comp.is_reachable({true,true,false}));
+    ASSERT_FALSE(comp.is_reachable({true,false,true}));
     ASSERT_FALSE(comp.is_reachable({false,true,true}));
 }
 

@@ -19,7 +19,6 @@ namespace ClassProject {
         void setDelta(const std::vector<BDD_ID> &transitions);
         void setInitState(const std::vector<bool>& stateVector);
         BDD_ID compute_reachable_states();
-        BDD_ID compute_reachable_state(int state);
         bool is_reachable(const std::vector<bool>& stateVector);
         Reachable(unsigned int stateSize);
         ~Reachable();

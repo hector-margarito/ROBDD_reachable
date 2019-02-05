@@ -26,8 +26,8 @@ TEST(managerTest, HowTo_Example) {
     //Add init state
     comp.setInitState({false,false});
 
-    ASSERT_TRUE(comp.is_reachable({true,true}));
     ASSERT_TRUE(comp.is_reachable({false,false}));
+    ASSERT_TRUE(comp.is_reachable({true,true}));
     ASSERT_FALSE(comp.is_reachable({true,false}));
     ASSERT_FALSE(comp.is_reachable({false,true}));
 }

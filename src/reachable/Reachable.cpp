@@ -67,31 +67,31 @@ BDD_ID Reachable::compute_reachable_states() {
 }
 
 BDD_ID Reachable::computeImage(BDD_ID relations_tau, BDD_ID char_R) {
-    BDD_ID img_SOS1, img_S0S1_prime;
-    BDD_ID s0_prime, s1_prime;
+    BDD_ID img, img_prime;
+    BDD_ID s_prime;
     BDD_ID temp1, temp2, temp3;
 
     /* Compute image of S primes */
-    img_S0S1_prime = and2(char_R, relations_tau);
+    img_prime = and2(char_R, relations_tau);
     for (int i = 0; i < stateSize; i++) {
-        img_S0S1_prime = or2(coFactorTrue(img_S0S1_prime, states[i]), coFactorFalse(img_S0S1_prime, states[i]));
+        img_prime = or2(coFactorTrue(img_prime, states[i]), coFactorFalse(img_prime, states[i]));
     }
     
     /* Compute image of S */
     temp1 = xnor2(states[0],states[stateSize]);
     for (int i = 1; i < stateSize; i++) {
-        s1_prime = states[stateSize + i];
-        temp1 = and2(temp1, xnor2(states[i],s1_prime));
-        temp2 = and2(temp1, img_S0S1_prime);
+        s_prime = states[stateSize + i];
+        temp1 = and2(temp1, xnor2(states[i],s_prime));
+        temp2 = and2(temp1, img_prime);
     }
 
-    img_SOS1 = or2(coFactorTrue(temp2, states[stateSize]), coFactorFalse(temp2, states[stateSize]));
+    img = or2(coFactorTrue(temp2, states[stateSize]), coFactorFalse(temp2, states[stateSize]));
     for (int i = 1; i < stateSize; i++) {
-        s0_prime = states[stateSize + i];
-        img_SOS1 = or2(coFactorTrue(img_SOS1, s0_prime), coFactorFalse(img_SOS1, s0_prime));
+        s_prime = states[stateSize + i];
+        img = or2(coFactorTrue(img, s_prime), coFactorFalse(img, s_prime));
     }
     
-    return img_SOS1;
+    return img;
 }
 
 BDD_ID Reachable::getTransitionRelation(int index) {

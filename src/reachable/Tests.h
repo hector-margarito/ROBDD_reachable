@@ -32,6 +32,40 @@ TEST(managerTest, HowTo_Example) {
     ASSERT_FALSE(comp.is_reachable({false,true}));
 }
 
+TEST(managerTest, More_states) {
+    ClassProject::Reachable comp(5);
+
+    auto states = comp.getStates();
+    std::vector<BDD_ID> functions;
+
+    auto s0 = states.at(0);
+    auto s1 = states.at(1);
+    auto s2 = states.at(2);
+    auto s3 = states.at(3);
+    auto s4 = states.at(4);
+    //s0' = not(s0)
+    functions.push_back(comp.neg(s0));
+    //s1' = not(s1)
+    functions.push_back(comp.neg(s1));
+    //s2' = (s2)
+    functions.push_back(s2);
+    //s3' = not(s3)
+    functions.push_back(comp.neg(s3));
+    //s4' = not(s4)
+    functions.push_back(comp.neg(s4));
+    //Add transition functions
+    comp.setDelta(functions);
+    //Add init state
+    comp.setInitState({false,false,true,false,false});
+
+    ASSERT_TRUE(comp.is_reachable({false,false,true,false,false}));
+    ASSERT_TRUE(comp.is_reachable({true,true,true,true,true}));
+    ASSERT_FALSE(comp.is_reachable({true,false,true,false,false}));
+    ASSERT_FALSE(comp.is_reachable({false,true,true,false,false}));
+    ASSERT_FALSE(comp.is_reachable({true,true,false,true,true}));
+    ASSERT_FALSE(comp.is_reachable({false,false,false,false,false}));
+}
+
 TEST(managerTest, exceptionErrorCheck_noInitState) {
     ClassProject::Reachable comp(2);
 

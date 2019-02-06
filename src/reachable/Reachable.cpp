@@ -66,10 +66,11 @@ BDD_ID Reachable::compute_reachable_states() {
     BDD_ID char_R;
     BDD_ID relations_tau = computeTransitionRelations();
     BDD_ID char_R_it = characteristic_S0;
+    BDD_ID image;
 
     do {
         char_R = char_R_it;
-        BDD_ID image = computeImage(relations_tau, char_R); 
+        image = computeImage(relations_tau, char_R); 
         char_R_it = or2(char_R, image);
     } while (char_R != char_R_it);
     
@@ -110,27 +111,19 @@ BDD_ID Reachable::getTransitionRelation(int index) {
 }
 
 bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
-    bool result = false;
-    try{
-        if(-1 == characteristic_S0)
-            throw std::runtime_error("No init state defined");
+    if (characteristic_S0 < BDD_ID_0)
+        throw std::runtime_error("No init state defined");
 
-        if(this->transitions.empty())
-            throw std::runtime_error("No deltas defined");
+    if (this->transitions.empty())
+        throw std::runtime_error("No deltas defined");
 
-        BDD_ID reachable = compute_reachable_states();
-        for (int i = 0; i < stateSize; i++) {
-            reachable = stateVector[i] ? 
-                coFactorTrue(reachable, this->states[i]) : 
-                coFactorFalse(reachable, this->states[i]);
-        }
-        result = (reachable == BDD_ID_1)? true: false;
+    BDD_ID isReachable = compute_reachable_states();
+    for (int i = 0; i < stateSize; i++) {
+        isReachable = stateVector[i] ? 
+            coFactorTrue(isReachable, this->states[i]) : 
+            coFactorFalse(isReachable, this->states[i]);
     }
-    catch(std::runtime_error &e){
-        std::cout << "Caught a runtime_error exception: "
-                  << e.what () << '\n';
-        result = false;
-    }
-    return result;
+
+    return isReachable;
 }
 

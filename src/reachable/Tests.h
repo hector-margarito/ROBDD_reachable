@@ -115,7 +115,7 @@ TEST(managerTest, exceptionErrorCheck_noInitState) {
     //Add transition functions
     comp.setDelta(functions);
 
-    ASSERT_FALSE(comp.is_reachable({true,true}));
+    EXPECT_ANY_THROW(comp.is_reachable({true,true}));
 }
 
 TEST(managerTest, exceptionErrorCheck_noDelta) {
@@ -133,7 +133,7 @@ TEST(managerTest, exceptionErrorCheck_noDelta) {
     //Add init state
     comp.setInitState({false,false});
 
-    ASSERT_FALSE(comp.is_reachable({true,true}));
+    EXPECT_ANY_THROW(comp.is_reachable({true,true}));
 }
 
 TEST(managerTest, More_than_2_states) {

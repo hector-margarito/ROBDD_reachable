@@ -90,9 +90,9 @@ BDD_ID Reachable::computeImage(BDD_ID relations_tau, BDD_ID char_R) {
     for (int i = 1; i < stateSize; i++) {
         s_prime = states[stateSize + i];
         temp1 = and2(temp1, xnor2(states[i],s_prime));
-        temp2 = and2(temp1, img_prime);
     }
 
+    temp2 = and2(temp1, img_prime);
     img = or2(coFactorTrue(temp2, states[stateSize]), coFactorFalse(temp2, states[stateSize]));
     for (int i = 1; i < stateSize; i++) {
         s_prime = states[stateSize + i];

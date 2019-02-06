@@ -114,6 +114,9 @@ bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
     if (this->transitions.empty())
         throw std::runtime_error("No deltas defined");
 
+    if (stateVector.size() != stateSize)
+        throw std::runtime_error("Invalid size of state vector");
+
     BDD_ID isReachable = compute_reachable_states();
     for (int i = 0; i < stateSize; i++) {
         isReachable = stateVector[i] ? 

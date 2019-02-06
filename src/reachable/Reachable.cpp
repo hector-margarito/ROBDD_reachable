@@ -31,6 +31,11 @@ const std::vector<BDD_ID> &Reachable::getStates() const {
 }
 
 void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions) {
+
+    if (transitionFunctions.size() != stateSize) {
+        throw std::runtime_error("Invalid size of transition functions vector.");
+    }
+
     this->transitions = transitionFunctions;
 }
 

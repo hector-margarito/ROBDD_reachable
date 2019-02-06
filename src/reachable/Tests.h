@@ -66,6 +66,24 @@ TEST(managerTest, More_states) {
     ASSERT_FALSE(comp.is_reachable({false,false,false,false,false}));
 }
 
+TEST(managerTest, exceptionErrorCheck_wrongTransitionFunctionSize) {
+    ClassProject::Reachable comp(2);
+
+    auto states = comp.getStates();
+    std::vector<BDD_ID> functions;
+
+    auto s0 = states.at(0);
+    auto s1 = states.at(1);
+    //s0' = not(s0)
+    functions.push_back(comp.neg(s0));
+    //s1' = not(s1)
+    functions.push_back(comp.neg(s1));
+    //s1' = not(s1)
+    functions.push_back(comp.neg(s1));
+    //Add transition functions
+    EXPECT_ANY_THROW(comp.setDelta(functions));
+}
+
 TEST(managerTest, exceptionErrorCheck_noInitState) {
     ClassProject::Reachable comp(2);
 

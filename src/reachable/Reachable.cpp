@@ -124,6 +124,6 @@ bool Reachable::is_reachable(const std::vector<bool>& stateVector) {
             coFactorFalse(isReachable, this->states[i]);
     }
 
-    return isReachable;
+    return isReachable == BDD_ID_1;
 }
 

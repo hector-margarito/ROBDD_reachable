@@ -35,6 +35,11 @@ void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions) {
 }
 
 void Reachable::setInitState(const std::vector<bool>& stateVector) {
+
+    if (stateVector.size() != stateSize) {
+        throw std::runtime_error("Invalid size of init state vector.");
+    }
+
     BDD_ID state = BDD_ID_1;
     characteristic_S0 = BDD_ID_1;
 

@@ -63,10 +63,9 @@ BDD_ID Reachable::computeTransitionRelations() {
 }
 
 BDD_ID Reachable::compute_reachable_states() {
-    BDD_ID char_R;
+    BDD_ID char_R, image;
     BDD_ID relations_tau = computeTransitionRelations();
     BDD_ID char_R_it = characteristic_S0;
-    BDD_ID image;
 
     do {
         char_R = char_R_it;
@@ -78,9 +77,7 @@ BDD_ID Reachable::compute_reachable_states() {
 }
 
 BDD_ID Reachable::computeImage(BDD_ID relations_tau, BDD_ID char_R) {
-    BDD_ID img, img_prime;
-    BDD_ID s_prime;
-    BDD_ID temp1, temp2, temp3;
+    BDD_ID img, img_prime, s_prime, temp1, temp2;
 
     /* Compute image of S primes */
     img_prime = and2(char_R, relations_tau);

@@ -26,7 +26,7 @@ namespace ClassProject {
        std::size_t operator()(const computed_key_t& k) const {
           return (std::get<0>(k)) ^ 
                 (std::get<1>(k)<<32) ^ 
-                (std::get<2>(k));
+                (std::get<2>(k)<<16);
        }
     };
 

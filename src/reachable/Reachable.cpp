@@ -45,12 +45,10 @@ void Reachable::setInitState(const std::vector<bool>& stateVector) {
         throw std::runtime_error("Invalid size of init state vector.");
     }
 
-    BDD_ID state = BDD_ID_1;
     characteristic_S0 = BDD_ID_1;
 
     for (int i = 0; i < stateSize; i++) {
-        state = and2(state, stateVector[i] ? this->states[i] : neg(this->states[i]));
-        characteristic_S0 = and2(characteristic_S0, xnor2(this->states[i], stateVector[i]));
+        characteristic_S0 = and2(characteristic_S0, stateVector[i] ? this->states[i] : neg(this->states[i]));
     }
 }
 

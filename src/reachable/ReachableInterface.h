@@ -1,5 +1,6 @@
 //
 // Created by ludwig on 04.12.18.
+// Completed, Corrected  and documented by Hector Margarito and Bruno Pessanha
 //
 
 #ifndef PROJECT_REACHABLEINTERFACE_H

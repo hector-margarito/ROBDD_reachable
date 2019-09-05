@@ -1,5 +1,6 @@
 //
-// Created by ludwig on 27.11.18.
+// Initital file Created by ludwig on 27.11.18.
+// Completed and Corrected by Hector Margarito and Bruno Pessanha
 //
 
 #include "Reachable.h"

@@ -1,5 +1,6 @@
 //
-// Created by ludwig on 27.11.18.
+// Initial File created by ludwig on 27.11.18.
+// Completed and Corrected by Hector Margarito and Bruno Pessanha
 //
 
 #ifndef VDSPROJECT_IMGCOMP_H

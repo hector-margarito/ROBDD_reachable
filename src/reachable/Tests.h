@@ -1,5 +1,6 @@
 //
 // Created by tobias on 29.11.18.
+// Completed and Corrected by Hector Margarito and Bruno Pessanha
 //
 
 #ifndef VDSPROJECT_TESTS_H
